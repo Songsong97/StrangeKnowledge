@@ -84,7 +84,7 @@ int Josephus(int n, int q) {
 }
 ```
 **时间复杂度分析：**
-这里我们只给出近似的证明，首先对N进行换元，设N=qn+1-x，N从nq开始减小，直到N<=n。于是x从1开始增大，直到x>=(q-1)n+1。则x在每次迭代中的递推式为x=ceiling((qx)/(q-1))，则迭代次数为O(log<sub>q/(q-1)</sub>((q-1)n))，此即算法运行时间的一个估计。
+首先对N进行换元，设N=qn+1-x，N从nq开始减小，直到N<=n。于是x从1开始增大，直到x>=(q-1)n+1。则x在每次迭代中的递推式为x=ceiling((qx)/(q-1))，因此迭代次数t不超过log<sub>q/(q-1)</sub>((q-1)n))，算法运行时间则为O(t)。
 
 <a name="Chapter3"></a>
 ## Fisher-Yates Shuffle(洗牌算法)
@@ -108,5 +108,21 @@ void shuffle(vector<int> &A) {
 
 <a name="Chapter4"></a>
 ## Boyer-Moore Majority Vote(寻找多数元素)
+[例题](https://leetcode.com/problems/majority-element-ii/ "LeetCode 229: Majority Element II")：给定一个长度为n的int数组，找到所有出现超过⌊ n/3 ⌋次的元素。
 
-5. [KMP(字符串匹配)](#Chapter5)
+对于此题，不难分析，majority element的个数至多2个，否则总共的元素个数将超过n个。Boyer-Moore Majority Vote算法的思想是用两个计数器来记录两个候选元素，在第一个pass后我们得到两个计数器的值和对应的元素，然后在第二个pass中我们去验证两个计数器对应的元素是否是多数元素。
+```cpp
+vector<int> majorityElement(vector<int>& nums) {
+
+}
+```
+
+<a name="Chapter5"></a>
+## KMP(字符串匹配)
+
+<a name="Chapter5.1"></a>
+### Maximum Repetition Factors(最大循环因子/最小循环节)
+
+<a name="Chapter5.2"></a>
+### Is T a rotation of S?(判断旋转字符串)
+
