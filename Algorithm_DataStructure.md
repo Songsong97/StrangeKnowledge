@@ -132,7 +132,9 @@ vector<int> majorityElement(vector<int>& nums) {
 <a name="Chapter9.1"></a>
 ### Topolocial Sort(拓扑排序)
 用DFS
+
 或者，Kahn's algorithm：
+
 L ← Empty list that will contain the sorted elements
 S ← Set of all nodes with no incoming edge
 
