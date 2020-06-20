@@ -193,17 +193,51 @@ KMP算法用于字符串匹配，时间复杂度为O(n+m)。CLRS对于该算法�
 
 已知一个模式P\[1..m]，模式P的前缀函数是函数π: {1, 2, ..., m} → {0, 1, ..., m-1}，满足:
 
-π\[q] = max{k: k<q 且 P<sub>k</sub>是P<sub>q</sub>的后缀}，
+π\[q] = max{k: k<q 且 P<sub>k</sub>是P<sub>q</sub>的后缀}，其中P<sub>x</sub>表示P的前x个字符组成的substring。
 
-其中，P<sub>x</sub>表示P的前x个字符组成的substring。
+利用该函数，我们可以在O(n)时间内完成文本T和模式P的匹配。注意，以下实现中，我们的字符串以索引0开始，需要对上述定义稍加修改，但本质是一样的。
 
 ```cpp
 void KMP_matcher(string T, string P) {
+    int n = T.length();
+    int m = P.length();
+    vector<int> next = compute_prefix_function(P);
+    int q = -1; // end index of the pattern matched 
+    for (int i = 0; i < n; i++) { // scan the text from left to right
+        while (q > -1 && P[q + 1] != T[i]) {
+            q = next[q]; // next character does not match
+        }
+        if (P[q + 1] == T[i]) {
+            q++; // next character matches
+        }
+        if (q == m - 1) { // is all of P matched?
+            cout << "Pattern occurs with shift " << i - m + 1 << endl;
+            q = next[q]; // look for the next match
+        }
+    }
 }
 
-vector<int> compute_prefix_function(stirng P) {
+vector<int> compute_prefix_function(string P) {
+    int m = P.length();
+    vector<int> next(m);
+    next[0] = -1;
+    int k = -1;
+    for (int q = 1; q < m; q++) {
+        while (k > -1 && P[k + 1] != P[q]) {
+            k = next[k];
+        }
+        if (P[k + 1] == P[q]) {
+            k++;
+        }
+        next[q] = k;
+    }
+    return next;
 }
 ```
+
+我们用compute_prefix_function计算模式P的前缀函数（记为next），该函数的结构和KMP算法的主体非常相似，它实际上相当于模式P与自身的匹配，并且时间复杂度为O(m)。细心推敲可以发现，计算过程运用了动态规划的思想，next数组保存了到位置q为止，能成为P<sub>q</sub>的后缀的最大真前缀长度。
+
+**注：** 很多教材将前缀函数π记为next，我们遵从这样的命名习惯。但是，next这个词本身容易产生歧义，或者说需要额外的解释说明。
 
 <a name="Chapter5.1"></a>
 ### Maximum Repetition Factors(最大循环因子/最小循环节)
