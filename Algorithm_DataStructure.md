@@ -189,6 +189,21 @@ vector<int> majorityElement(vector<int>& nums) {
 
 <a name="Chapter5"></a>
 ## KMP(字符串匹配)
+KMP算法用于字符串匹配，时间复杂度为O(n+m)。CLRS对于该算法有比较好的解读，这里只摘取一些核心内容。
+
+已知一个模式P\[1..m]，模式P的前缀函数是函数π: {1, 2, ..., m} → {0, 1, ..., m-1}，满足:
+
+π\[q] = max{k: k<q 且 P<sub>k</sub>是P<sub>q</sub>的后缀}，
+
+其中，P<sub>x</sub>表示P的前x个字符组成的substring。
+
+```cpp
+void KMP_matcher(string T, string P) {
+}
+
+vector<int> compute_prefix_function(stirng P) {
+}
+```
 
 <a name="Chapter5.1"></a>
 ### Maximum Repetition Factors(最大循环因子/最小循环节)
