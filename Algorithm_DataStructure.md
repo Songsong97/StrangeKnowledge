@@ -165,13 +165,13 @@ vector<int> majorityElement(vector<int>& nums) {
 ```
 
 **算法正确性证明：**
-证明的关键是要证明：多数元素一定会留在candidate中。我们的证明方法类似于聚合分析，更多关于聚合分析请参考CLRS。
+证明的关键是要证明：多数元素一定会留在candidate中。我们的证明方法类似于聚合分析，聚合分析的详细介绍请参考CLRS。
 
 对于一个多数元素e，我们将它的计数值表示为ct<sub>e</sub>。类似地，对于其他元素i (i != e)，计数值表示为ct<sub>i</sub>。
 
-当我们遇到e时，会有两种可能的行为：1.使ct<sub>e</sub>增加1; 2.使两个其他candidate的ct<sub>i</sub>和ct<sub>j</sub>减1(其中i, j, e互不相等)。
+当我们遇到e时，会有两种可能的行为：1.使ct<sub>e</sub>增加1； 2.使两个其他candidate的ct<sub>i</sub>和ct<sub>j</sub>减1(其中i, j, e互不相等)。
 
-当我们遇到i时(i != e)，有三种可能的行为：1.使ct<sub>i</sub>增加1；2.使ct<sub>j</sub>和ct<sub>k</sub>减1(其中i, j, k互不相等)；3.使得ct<sub>e</sub>和ct<sub>j</sub>减1(其中i, j, k互不相等)。
+当我们遇到i时(i != e)，有三种可能的行为：1.使ct<sub>i</sub>增加1；2.使ct<sub>j</sub>和ct<sub>k</sub>减1(其中i, j, k互不相等)；3.使ct<sub>e</sub>和ct<sub>j</sub>减1(其中i, j, k互不相等)。
 
 我们将**遇到e时行为1发生的次数**记为E<sub>1</sub>，将**遇到e时行为2发生的次数**记为E<sub>2</sub>。不难发现，两种行为发生的总次数即为数组中e的个数。由于e的个数严格大于⌊ n/3 ⌋，我们可以得到E<sub>1</sub>+E<sub>2</sub> > ⌊ n/3 ⌋。
 
@@ -181,7 +181,7 @@ vector<int> majorityElement(vector<int>& nums) {
 
 注意到，A<sub>1</sub>+A<sub>2</sub>+A<sub>3</sub>=n-(E<sub>1</sub>+E<sub>2</sub>)。元素e最终仍然是candidate的条件是它的计数值大于0，而它最终的计数值可按此计算：E<sub>1</sub>-A<sub>3</sub>，所以我们只需要证明E<sub>1</sub>-A<sub>3</sub> > 0即可。
 
-在遇到e时发生行为2的次数达到E<sub>2</sub>的前提是，行为a<sub>1</sub>至少发生了2E<sub>2</sub>次，使得我们遇到e时有有足够的计数值被减掉。同理，行为a<sub>2</sub>和行为a<sub>3</sub>也会消耗不等于e的元素的计数值。因此我们有A<sub>1</sub> >= 2E<sub>2</sub>+2A<sub>2</sub>+A<sub>3</sub>.
+在遇到e时发生行为2的次数达到E<sub>2</sub>的前提是，行为a<sub>1</sub>至少发生了2E<sub>2</sub>次，使得我们遇到e时有有足够的计数值被减掉。同理，行为a<sub>2</sub>和行为a<sub>3</sub>也会消耗不等于e的元素的计数值。因此我们有A<sub>1</sub> >= 2E<sub>2</sub>+2A<sub>2</sub>+A<sub>3</sub>. 下图包含了余下的证明过程。
 
 ![](./Boyer-Moore2.jpg)
 
