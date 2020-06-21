@@ -265,6 +265,23 @@ S的旋转定义为：令S的全体字符向左（或右）移动k (0 <= k < S.l
 
 我们可以将两个T拼接起来得到一个新的字符串T<sup>2</sup>，然后在T<sup>2</sup>中查找模式S。如果匹配成功则说明T是S的旋转。
 
+<a name="Chapter6"></a>
+## Greedy(贪心法)
+CLRS中对贪心法的描述为：在每个决策点，它做出在当时看来最佳的选择。这种启发式策略并不保证总能找到最优解，但对有些问题确实有效。
+
+<a name="Chapter6.1"></a>
+### Task Scheduler ([LeetCode 621](https://leetcode.com/problems/task-scheduler/))
+
+<a name="Chapter7"></a>
+## Dynamic Programming(动态规划)
+动态规划通过备忘录或者自下而上的方式，避免重复求解子问题。
+
+<a name="Chapter7.1"></a>
+### Longest Common Subsequence(最长公共子序列)
+题目描述在这：[LeetCode 1143: Longest Common Subsequence](https://leetcode.com/problems/longest-common-subsequence/)
+
+字符串S的子序列定义为：从S中剔除一些字符（可以不剔除）后剩下的字符串（保留原始相对位置）。
+
 <a name="Chapter9"></a>
 ## Graph(图算法)
 
