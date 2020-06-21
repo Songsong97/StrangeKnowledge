@@ -271,6 +271,41 @@ CLRS中对贪心法的描述为：在每个决策点，它做出在当时看来�
 
 <a name="Chapter6.1"></a>
 ### Task Scheduler ([LeetCode 621](https://leetcode.com/problems/task-scheduler/))
+[这里](https://leetcode.com/problems/task-scheduler/discuss/104500/Java-O(n)-time-O(1)-space-1-pass-no-sorting-solution-with-detailed-explanation)有一个对该问题非常细致的解读。我们对其核心思想进行一些说明。
+
+假如我们的任务列表为{A, A, A, B, B, C}，冷却时间n = 2，直观上来看，我们的调度方案应该是A B C A B idle A。A出现的次数最多，所以无论如何，我们要将所有的A尽可能最密集地排开，也就得到了A slot slot A slot slot A，其中slot表示可以放入任务的一个槽。
+
+我们将其余的任务填在这些slot中，得到结果A B C A B idle A。idle的数量事实上就等于空的槽的数量减去剩余的任务数量。
+
+如果空的槽的个数不足以使我们放入所有的剩余任务，这种情况其实是一个更宽松的条件。例如任务列表为{A, A, A, B, B, C, C, D, D}，冷却时间为2，我们在放完C之后发现没有slot可以放了：A B C A B C A。但其实我们加大两个A之间的间隔就好了：A B C D A B C D A。这样一来D也能放进去，并且所有相同任务之间的间隔依然满足要求。这种情况下，我们并不需要设置idle。
+
+另外考虑出现次数最多的任务不唯一的情况，例如{A, A, B, B, C, D}, n = 2。这时我们用所有出现次数最多的任务来确定slot：A B slot A B。
+
+代码如下。
+
+```cpp
+int leastInterval(vector<char>& tasks, int n) {
+    vector<int> freq(26, 0);        
+    for (int i = 0; i < tasks.size(); i++) {
+        freq[tasks[i] - 'A']++;
+    }
+    int maxFreq = 0;
+    int maxFreqCt = 1;
+    for (int i = 0; i < freq.size(); i++) {
+        if (freq[i] > maxFreq) {
+            maxFreq = freq[i];
+            maxFreqCt = 1;
+        }
+        else if (freq[i] == maxFreq) {
+            maxFreqCt++;
+        }
+    }
+    int emptySlots = (n - maxFreqCt + 1) * (maxFreq - 1);
+    int remainingTasks = tasks.size() - maxFreqCt * maxFreq;
+    int idle = max(0, emptySlots - remainingTasks);
+    return tasks.size() + idle;
+}
+```
 
 <a name="Chapter7"></a>
 ## Dynamic Programming(动态规划)
@@ -281,6 +316,24 @@ CLRS中对贪心法的描述为：在每个决策点，它做出在当时看来�
 题目描述：[LeetCode 1143](https://leetcode.com/problems/longest-common-subsequence/)
 
 字符串S的子序列定义为：从S中剔除一些字符（可以不剔除）后剩下的字符串（保留原始相对位置）。
+
+这里dp的递推式体现在下面代码的if-else条件中。
+
+```cpp
+int longestCommonSubsequence(string text1, string text2) {
+    vector<vector<int>> dp(text1.size() + 1, vector<int>(text2.size() + 1, 0));
+    for (int i = 0 ; i < text1.size(); i++) {
+        for (int j = 0; j < text2.size(); j++) {
+            if (text1[i] == text2[j])
+                dp[i + 1][j + 1] = dp[i][j] + 1;
+            else {
+                dp[i + 1][j + 1] = max(dp[i][j + 1], dp[i + 1][j]);
+            }
+        }
+    }
+    return dp[text1.size()][text2.size()];
+}
+```
 
 <a name="Chapter9"></a>
 ## Graph(图算法)
