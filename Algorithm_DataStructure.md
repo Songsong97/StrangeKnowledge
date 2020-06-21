@@ -7,7 +7,7 @@
 4. [Boyer-Moore Majority Vote(寻找多数元素)](#Chapter4)
 5. [KMP(字符串匹配)](#Chapter5)
     1. [Maximum Repetition Factors(最大循环因子/最小循环节)](#Chapter5.1)
-    2. [Is T a rotation of S?(判断旋转字符串)](#Chapter5.2)
+    2. [Is T a rotation of S? (判断旋转字符串)](#Chapter5.2)
 6. [Greedy(贪心法)](#Chapter6)
     1. [Task Scheduler (LeetCode 621)](#Chapter6.1)
 7. [Dynamic Programming(动态规划)](#Chapter7)
@@ -245,10 +245,25 @@ vector<int> compute_prefix_function(string P) {
 
 <a name="Chapter5.1"></a>
 ### Maximum Repetition Factors(最大循环因子/最小循环节)
-问题描述：设y<sup>i</sup>表示字符串y与其自身首尾相接i次所得的结果。例如(ab)<sup>3</sup> = ababab。如果对某个字符串y和某个r>0有x=y<sup>r</sup>，则称字符串x具有重复因子r，y称为x的循环节。给定一个字符串S，找到它具有的重复因子的最大值，或者等价的，找到它具有的最小循环节。
+解决下面的问题是KMP算法的一个经典应用场合：
+
+设y<sup>i</sup>表示字符串y与其自身首尾相接i次所得的结果。例如(ab)<sup>3</sup> = ababab。如果对某个字符串y和某个r>0有x=y<sup>r</sup>，则称字符串x具有重复因子r，y称为x的循环节。给定一个字符串S，找到它具有的重复因子的最大值，或者等价的，找到它具有的最小循环节。
+
+例子：ababab的最大循环因子为3，最小循环节为ab；abac的最大循环因子为1，最小循环节为它本身。
+
+KMP算法的前缀函数π，能帮助我们解决这个问题。对于字符串S\[1...n]，考虑这种情况：n % (n-π\[n]) == 0。根据前缀函数的性质，S的前π\[n]个字符是S的后缀。设t = π\[n]，则有S\[1...t] == S\[(n-t+1)...n]。
+
+因此，S\[1...(n-t)] = S\[(n-t+1)...(2n-2t)] = S\[(2n-2t+1)...(3n-3t)] = ... = S\[(t+1)...n]，前n-t个字符组成字符串S的一个最小循环节。
+
+如果n % (n-π\[n]) != 0，那么可以看作字符串S缺失了一部分字符，来组成S\[1...t]的幂，因此最小循环节就是它本身。例如：abcabcab，n = 8, n - t = 3。
 
 <a name="Chapter5.2"></a>
-### Is T a rotation of S?(判断旋转字符串)
+### Is T a rotation of S? (判断旋转字符串)
+KMP算法的另一典型用例是判断两个字符串是否能通过**旋转操作**进行转换。
+
+S的旋转定义为：令S的全体字符向左（或右）移动k (0 <= k < S.length())次，溢出的字符接在另一侧的后面。例如：cdab是abcd的一个旋转。给定两个字符串T和S，判断T是否为S的旋转。
+
+我们可以将两个T拼接起来得到一个新的字符串T<sup>2</sup>，然后在T<sup>2</sup>中查找模式S。如果匹配成功则说明T是S的旋转。
 
 <a name="Chapter9"></a>
 ## Graph(图算法)
