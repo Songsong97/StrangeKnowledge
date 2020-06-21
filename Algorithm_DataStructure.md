@@ -278,7 +278,7 @@ CLRS中对贪心法的描述为：在每个决策点，它做出在当时看来�
 
 <a name="Chapter7.1"></a>
 ### Longest Common Subsequence(最长公共子序列)
-题目描述在这：[LeetCode 1143: Longest Common Subsequence](https://leetcode.com/problems/longest-common-subsequence/)
+题目描述：[LeetCode 1143](https://leetcode.com/problems/longest-common-subsequence/)
 
 字符串S的子序列定义为：从S中剔除一些字符（可以不剔除）后剩下的字符串（保留原始相对位置）。
 
