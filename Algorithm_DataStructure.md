@@ -350,6 +350,7 @@ int longestCommonSubsequence(string text1, string text2) {
     PARENT(i) = ⌊ (i-1)/2 ⌋, LEFT(i) = 2i+1, RIGHT(i) = 2i+2.
 
 2. **MAX_HEAPIFY**用于维护最大堆的性质。在调用时，我们假定根结点为LEFT(i)和RIGHT(i)的二叉树都是最大堆，但这时A\[i]有可能小于其孩子。MAX_HEAPIFY让A\[i]的值在最大堆中“逐级下降”，以维护最大堆的性质。
+
 ```cpp
 void MAX_HEAPIFY(vector<int> &A, int i, int heapSize) {
     int l = LEFT(i);
@@ -374,6 +375,7 @@ void MAX_HEAPIFY(vector<int> &A, int i, int heapSize) {
 ```
 
 3. **建堆**
+
 ```cpp
 void BUILD_MAX_HEAP(vector<int> &A) {
     for (int i = A.size() / 2 - 1; i >= 0; i--) {
@@ -383,6 +385,7 @@ void BUILD_MAX_HEAP(vector<int> &A) {
 ```
 
 4. **堆排序算法**
+
 ```cpp
 void HEAPSORT(vector<int> &A) {
     BUILD_MAX_HEAP(A);
@@ -398,15 +401,16 @@ void HEAPSORT(vector<int> &A) {
 ```
 
 5. **优先队列**
-一个**最大优先队列**支持以下操作：
 
-INSERT(S, x)：把元素x插入集合S中。
+    一个**最大优先队列**支持以下操作：
 
-MAXIMUM(S)：返回S中具有最大键字的元素。
+    INSERT(S, x)：把元素x插入集合S中。
 
-EXTRACT_MAX(S)：去掉并返回S中的具有最大键字的元素。
+    MAXIMUM(S)：返回S中具有最大键字的元素。
 
-INCREASE_KEY(S, x, k)：将元素x的关键字值增加到k，这里假设k的值不小于x的原关键字值。
+    EXTRACT_MAX(S)：去掉并返回S中的具有最大键字的元素。
+
+    INCREASE_KEY(S, x, k)：将元素x的关键字值增加到k，这里假设k的值不小于x的原关键字值。
 
 ```cpp
 int HEAP_MAXIMUM(const vector<int> &A) {
