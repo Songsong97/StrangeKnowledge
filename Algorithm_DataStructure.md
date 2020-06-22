@@ -309,7 +309,9 @@ int leastInterval(vector<char>& tasks, int n) {
 
 <a name="Chapter7"></a>
 ## Dynamic Programming(动态规划)
-动态规划通过备忘录或者自下而上的方式，避免重复求解子问题。
+动态规划通过**备忘录**或者**自下而上**的方式，避免重复求解子问题。可以参考CLRS了解两种方式的更多细节。
+
+很多动态规划问题可以建构为对2维dp数组的填充。典型的例如Longest Common Subsequence问题，我们可以从**邻近的**规模更小的子问题中得出当前问题的解。有一些题目，例如[LeetCode 62: Unique Paths](https://leetcode.com/problems/unique-paths/)，有着更为明显的几何含义。而对于像[LeetCode 174: Dungeon Game](https://leetcode.com/problems/dungeon-game/)这样的题目，我们构建dp数组的方向还会影响算法的可行性。
 
 <a name="Chapter7.1"></a>
 ### Longest Common Subsequence(最长公共子序列)
@@ -334,6 +336,125 @@ int longestCommonSubsequence(string text1, string text2) {
     return dp[text1.size()][text2.size()];
 }
 ```
+
+<a name="Chapter8"></a>
+## Data Structures(数据结构)
+奇怪的知识持续增加。
+
+<a name="Chapter8.1"></a>
+### Heap(堆)
+堆这种数据结构拥有很重要的性质，它可以替我们方便地维护可比较的层级结构，用于**排序**或者**优先队列**。CLRS中对堆数据结构有详尽的说明。
+
+1. 对于一个数组A，我们将其看作一个堆，那么对于下标i，我们可以计算它的父结点、左孩子、右孩子的下标：
+
+    PARENT(i) = ⌊ (i-1)/2 ⌋, LEFT(i) = 2i+1, RIGHT(i) = 2i+2.
+
+2. **MAX_HEAPIFY**用于维护最大堆的性质。在调用时，我们假定根结点为LEFT(i)和RIGHT(i)的二叉树都是最大堆，但这时A\[i]有可能小于其孩子。MAX_HEAPIFY让A\[i]的值在最大堆中“逐级下降”，以维护最大堆的性质。
+```cpp
+void MAX_HEAPIFY(vector<int> &A, int i, int heapSize) {
+    int l = LEFT(i);
+    int r = RIGHT(i);
+    int largest;
+    if (l < heapSize && A[l] > A[i]) {
+        largest = l;
+    }
+    else {
+        largest = i;
+    }
+    if (r < heapSize && A[r] > A[largest]) {
+        largest = r;
+    }
+    if (largest != i) {
+        int temp = A[i];
+        A[i] = A[largest];
+        A[largest] = temp;
+        MAX_HEAPIFY(A, largest, heapSize);
+    }
+}
+```
+
+3. **建堆**
+```cpp
+void BUILD_MAX_HEAP(vector<int> &A) {
+    for (int i = A.size() / 2 - 1; i >= 0; i--) {
+        MAX_HEAPIFY(A, i, A.size());
+    }
+}
+```
+
+4. **堆排序算法**
+```cpp
+void HEAPSORT(vector<int> &A) {
+    BUILD_MAX_HEAP(A);
+    int heapSize = A.size();
+    for (int i = A.size() - 1; i >= 0; i--) {
+        int temp = A[0];
+        A[0] = A[i];
+        A[i] = temp;
+        heapSize--;
+        MAX_HEAPIFY(A, 0, heapSize);
+    }
+}
+```
+
+5. **优先队列**
+一个**最大优先队列**支持以下操作：
+
+INSERT(S, x)：把元素x插入集合S中。
+
+MAXIMUM(S)：返回S中具有最大键字的元素。
+
+EXTRACT_MAX(S)：去掉并返回S中的具有最大键字的元素。
+
+INCREASE_KEY(S, x, k)：将元素x的关键字值增加到k，这里假设k的值不小于x的原关键字值。
+
+```cpp
+int HEAP_MAXIMUM(const vector<int> &A) {
+    return A[0];
+}
+
+int HEAP_EXTRACT_MAX(vector<int> &A, int &heapSize) {
+    if (heapSize < 1) {
+        cout << "heap underflow" << endl;
+    }
+    int max = A[0];
+    A[0] = A[heapSize - 1];
+    heapSize--;
+    MAX_HEAPIFY(A, 0, heapSize);
+    return max;
+}
+
+void HEAP_INCREASE_KEY(vector<int> &A, int i, int key) {
+    if (key < A[i]) {
+        cout << "new key is smaller than current key" << endl;
+    }
+    A[i] = key;
+    while (i > 0 && A[PARENT(i)] < A[i]) {
+        int temp = A[i];
+        A[i] = A[PARENT(i)];
+        A[PARENT(i)] = temp;
+        i = PARENT(i);
+    }
+}
+
+void MAX_HEAP_INSERT(vector<int> &A, int key, int &heapSize) {
+    heapSize++;
+    A.push_back(INT_MIN);
+    HEAP_INCREASE_KEY(A, heapSize - 1, key);
+}
+```
+
+后续我们将看到，优先队列可以用于Dijkstra算法和A\*算法。
+
+
+<a name="Chapter8.2"></a>
+### Red-Black Trees(红黑树)
+
+<a name="Chapter8.3"></a>
+### B-Trees(B树)
+
+<a name="Chapter8.4"></a>
+### Merge-Find Set(用于不相交集合的并查集)
 
 <a name="Chapter9"></a>
 ## Graph(图算法)
