@@ -1,30 +1,36 @@
 # Algorithms and Data Structures
 奇怪的知识增加了！！！
 ## Table of contents
-1. [Floyd's Turtoise and Hare(环检测算法)](#Chapter1)
-2. [Josephus Problem(约瑟夫环)](#Chapter2)
-3. [Fisher-Yates Shuffle(洗牌算法)](#Chapter3)
-4. [Boyer-Moore Majority Vote(寻找多数元素)](#Chapter4)
-5. [KMP(字符串匹配)](#Chapter5)
-    1. [Maximum Repetition Factors(最大循环因子/最小循环节)](#Chapter5.1)
-    2. [Is T a rotation of S? (判断旋转字符串)](#Chapter5.2)
-6. [Greedy(贪心法)](#Chapter6)
-    1. [Task Scheduler (LeetCode 621)](#Chapter6.1)
-7. [Dynamic Programming(动态规划)](#Chapter7)
-    1. [Longest Common Subsequence(最长公共子序列)](#Chapter7.1)
-8. [Data Structures(数据结构)](#Chapter8)
-    1. [Heap(堆)](#Chapter8.1)
-    2. [Red-Black Trees(红黑树)](#Chapter8.2)
-    3. [B-Trees(B树)](#Chapter8.3)
-    4. [Merge-Find Set(用于不相交集合的并查集)](#Chapter8.4)
-9. [Graph(图算法)](#Chapter9)
-    1. [Topolocial Sort(拓扑排序)](#Chapter9.1)
-    2. [Strongly Connected Component(强连通分量)](#Chapter9.2)
-    3. [Dijkstra's Algorithm(单源最短路径)](#Chapter9.3)
-    4. [A* Algorithm(A-star启发式最短路径算法)](#Chapter9.4)
+1. [Selected Topics I(算法问题选编1)](#Chapter1)
+    1. [Floyd's Turtoise and Hare(环检测算法)](#Chapter1.1)
+    2. [Josephus Problem(约瑟夫环)](#Chapter1.2)
+    3. [Fisher-Yates Shuffle(洗牌算法)](#Chapter1.3)
+    4. [Boyer-Moore Majority Vote(寻找多数元素)](#Chapter1.4)
+2. [KMP(字符串匹配)](#Chapter2)
+    1. [Maximum Repetition Factors(最大循环因子/最小循环节)](#Chapter2.1)
+    2. [Is T a rotation of S? (判断旋转字符串)](#Chapter2.2)
+3. [Greedy(贪心法)](#Chapter3)
+    1. [Task Scheduler (LeetCode 621)](#Chapter3.1)
+4. [Dynamic Programming(动态规划)](#Chapter4)
+    1. [Longest Common Subsequence(最长公共子序列)](#Chapter4.1)
+5. [Data Structures(数据结构)](#Chapter5)
+    1. [Heap(堆)](#Chapter5.1)
+    2. [Red-Black Trees(红黑树)](#Chapter5.2)
+    3. [B-Trees(B树)](#Chapter5.3)
+    4. [Merge-Find Set(用于不相交集合的并查集)](#Chapter5.4)
+6. [Graph(图算法)](#Chapter6)
+    1. [Topological Sort(拓扑排序)](#Chapter6.1)
+    2. [Strongly Connected Component(强连通分量)](#Chapter6.2)
+    3. [Dijkstra's Algorithm(单源最短路径)](#Chapter6.3)
+    4. [A* Algorithm(A-star启发式最短路径算法)](#Chapter6.4)
+7. [Selected Topics II(算法问题选编2)](#Chapter7)
 
 <a name="Chapter1"></a>
-## Floyd's Turtoise and Hare(环检测算法)
+## Selected Topics I(算法问题选编1)
+奇怪的知识增加了！！
+
+<a name="Chapter1.1"></a>
+### Floyd's Turtoise and Hare(环检测算法)
 先看一道[例题](https://leetcode.com/problems/linked-list-cycle-ii/ "LeetCode 142: Linked List Cycle II")：给定一个链表，返回环的起点；
 若没有环，返回null。
 
@@ -55,8 +61,8 @@
 
 这里有[彩蛋](https://www.youtube.com/watch?v=pKO9UjSeLew)
 
-<a name="Chapter2"></a>
-## Josephus Problem(约瑟夫环)
+<a name="Chapter1.2"></a>
+### Josephus Problem(约瑟夫环)
 n个人围成一个圈，每q个人踢掉一个人，问最后留下来的人是几号？
 
 若使用循环链表模拟计算出结果，则时间复杂度为O(nq)。现在我们尝试用数学进行推导，这将使我们的算法时间复杂度减小。
@@ -89,8 +95,8 @@ int Josephus(int n, int q) {
 **时间复杂度分析：**
 首先对N进行换元，设N=qn+1-x，N从nq开始减小，直到N<=n。于是x从1开始增大，直到x>=(q-1)n+1。则x在每次迭代中的递推式为x=ceiling((qx)/(q-1))，因此迭代次数t不超过log<sub>q/(q-1)</sub>((q-1)n))=log<sub>q/(q-1)</sub>n+C，其中C=log<sub>q/(q-1)</sub>(q-1)，因此算法运行时间为O(log(n))。
 
-<a name="Chapter3"></a>
-## Fisher-Yates Shuffle(洗牌算法)
+<a name="Chapter1.3"></a>
+### Fisher-Yates Shuffle(洗牌算法)
 给定一个长度为n的数组，随机返回一个该数组的排列，每种排列被返回的概率为1/n!。
 
 洗牌算法的思路很简单，从最后一个位置n-1循环至位置0，对于每一个位置i，随机选取\[0,n-1]区间上的一个位置j，交换i和j两个位置的值。
@@ -109,8 +115,8 @@ void shuffle(vector<int> &A) {
 ```
 可以证明，对于原数组中任何一个数，洗牌后它出现在位置i的概率为1/n。
 
-<a name="Chapter4"></a>
-## Boyer-Moore Majority Vote(寻找多数元素)
+<a name="Chapter1.4"></a>
+### Boyer-Moore Majority Vote(寻找多数元素)
 [例题](https://leetcode.com/problems/majority-element-ii/ "LeetCode 229: Majority Element II")：给定一个长度为n的int数组，找到所有出现超过⌊ n/3 ⌋次的元素。
 
 对于此题，不难分析，majority element的个数至多2个，否则总共的元素个数将超过n个。Boyer-Moore Majority Vote算法的思想如下：
@@ -187,7 +193,7 @@ vector<int> majorityElement(vector<int>& nums) {
 
 **证毕**
 
-<a name="Chapter5"></a>
+<a name="Chapter2"></a>
 ## KMP(字符串匹配)
 KMP算法用于字符串匹配，时间复杂度为O(n+m)。CLRS对于该算法有比较好的解读，这里只摘取一些核心内容。
 
@@ -243,7 +249,7 @@ vector<int> compute_prefix_function(string P) {
 
 **注：** 很多教材将前缀函数π记为next，我们遵从这样的命名习惯。但是，next这个词本身容易产生歧义，或者说需要额外的解释说明。
 
-<a name="Chapter5.1"></a>
+<a name="Chapter2.1"></a>
 ### Maximum Repetition Factors(最大循环因子/最小循环节)
 解决下面的问题是KMP算法的一个经典应用场合：
 
@@ -257,7 +263,7 @@ KMP算法的前缀函数π，能帮助我们解决这个问题。对于字符串
 
 如果n % (n-π\[n]) != 0，那么可以看作字符串S缺失了一部分字符，来组成S\[1...t]的幂，因此最小循环节就是它本身。例如：abcabcab，n = 8, n - t = 3。
 
-<a name="Chapter5.2"></a>
+<a name="Chapter2.2"></a>
 ### Is T a rotation of S? (判断旋转字符串)
 KMP算法的另一典型用例是判断两个字符串是否能通过**旋转操作**进行转换。
 
@@ -265,11 +271,11 @@ S的旋转定义为：令S的全体字符向左（或右）移动k (0 <= k < S.l
 
 我们可以将两个T拼接起来得到一个新的字符串T<sup>2</sup>，然后在T<sup>2</sup>中查找模式S。如果匹配成功则说明T是S的旋转。
 
-<a name="Chapter6"></a>
+<a name="Chapter3"></a>
 ## Greedy(贪心法)
 CLRS中对贪心法的描述为：在每个决策点，它做出在当时看来最佳的选择。这种启发式策略并不保证总能找到最优解，但对有些问题确实有效。
 
-<a name="Chapter6.1"></a>
+<a name="Chapter3.1"></a>
 ### Task Scheduler ([LeetCode 621](https://leetcode.com/problems/task-scheduler/))
 [这里](https://leetcode.com/problems/task-scheduler/discuss/104500/Java-O(n)-time-O(1)-space-1-pass-no-sorting-solution-with-detailed-explanation)有一个对该问题非常细致的解读。我们对其核心思想进行一些说明。
 
@@ -307,13 +313,13 @@ int leastInterval(vector<char>& tasks, int n) {
 }
 ```
 
-<a name="Chapter7"></a>
+<a name="Chapter4"></a>
 ## Dynamic Programming(动态规划)
 动态规划通过**备忘录**或者**自下而上**的方式，避免重复求解子问题。可以参考CLRS了解两种方式的更多细节。
 
 很多动态规划问题可以建构为对2维dp数组的填充。典型的例如Longest Common Subsequence问题，我们可以从**邻近的**规模更小的子问题中得出当前问题的解。有一些题目，例如[LeetCode 62: Unique Paths](https://leetcode.com/problems/unique-paths/)，有着更为明显的几何含义。而对于像[LeetCode 174: Dungeon Game](https://leetcode.com/problems/dungeon-game/)这样的题目，我们构建dp数组的方向还会影响算法的可行性。
 
-<a name="Chapter7.1"></a>
+<a name="Chapter4.1"></a>
 ### Longest Common Subsequence(最长公共子序列)
 题目描述：[LeetCode 1143](https://leetcode.com/problems/longest-common-subsequence/)
 
@@ -337,11 +343,11 @@ int longestCommonSubsequence(string text1, string text2) {
 }
 ```
 
-<a name="Chapter8"></a>
+<a name="Chapter5"></a>
 ## Data Structures(数据结构)
 奇怪的知识持续增加。
 
-<a name="Chapter8.1"></a>
+<a name="Chapter5.1"></a>
 ### Heap(堆)
 堆这种数据结构拥有很重要的性质，它可以替我们方便地维护可比较的层级结构，用于**排序**或者**优先队列**。CLRS中对堆数据结构有详尽的说明。
 
@@ -450,21 +456,42 @@ void MAX_HEAP_INSERT(vector<int> &A, int key, int &heapSize) {
 
 后续我们将看到，优先队列可以用于Dijkstra算法和A\*算法。
 
-
-<a name="Chapter8.2"></a>
+<a name="Chapter5.2"></a>
 ### Red-Black Trees(红黑树)
+红黑树是一种平衡的二叉搜索树，它的高度不超过2lg(n+1)。CLRS中对红黑树有详尽的说明，这里我们只介绍它的性质。
 
-<a name="Chapter8.3"></a>
+一棵红黑树是满足下面**红黑性质**的二叉搜索树：
+1. 每个结点或是红色的，或是黑色的。
+2. 根结点是黑色的。
+3. 每个叶结点(NULL)是黑色的。（我们将NULL当成一个哨兵，将它看作树的叶结点）
+4. 如果一个结点是红色的，则它的两个子结点都是黑色的。
+5. 对每个结点，从该结点到其所有后代叶结点的简单路径上，均包含相同数目的黑色结点。
+
+从某个结点x出发（不含该结点）到达一个叶结点的任意一条简单路径上的黑色结点个数称为该结点的**黑高**(black-height)，记为bh(x)。
+
+一棵有n个内部结点的红黑树的高度至多为2lg(n+1)。
+
+**证明**
+
+先证明以任一结点x为根的子树中至少包含2<sup>bh(x)</sup>-1个内部结点。对x的高度进行归纳可以得证。
+
+根据性质4，从根到叶结点（不包含根结点）的任何一条简单路径上都至少有一半的结点为黑色。因此根的黑高至少为h/2，于是n >= 2<sup>h/2</sup> - 1，得到h <= 2lg(n+1)。
+
+**证毕**
+
+该性质说明了为什么红黑树是一种好的搜索树。事实上，在树上的**插入**和**删除**操作，都可以在O(h)时间内完成，即在O(lg*n*)时间内完成。这两个操作请参考CLRS。
+
+<a name="Chapter5.3"></a>
 ### B-Trees(B树)
 
-<a name="Chapter8.4"></a>
+<a name="Chapter5.4"></a>
 ### Merge-Find Set(用于不相交集合的并查集)
 
-<a name="Chapter9"></a>
+<a name="Chapter6"></a>
 ## Graph(图算法)
 
-<a name="Chapter9.1"></a>
-### Topolocial Sort(拓扑排序)
+<a name="Chapter6.1"></a>
+### Topological Sort(拓扑排序)
 用DFS
 
 或者，Kahn's algorithm：
