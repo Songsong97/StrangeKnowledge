@@ -503,10 +503,57 @@ B树的一个结点，就可以是一个页面大小。我们的算法在引用�
 
 假设我们从叶结点删除一个key之后，key的数量少于t-1，我们自然希望对其进行补充。如果它相邻的两个兄弟结点中有一个的key大于t-1，则向其借一个key。若没有这样的兄弟，那么与一个兄弟进行合并。
 
-更详细的说明请参考CLRS。
+插入和删除操作都可以在O(lg*n*)时间内完成，更详细的说明请参考CLRS。
+
+**为什么数据库系统多采用B树而不是Hash表？**
+
+1. Hash表只定义了equal函数，它适合用于元素的存在性判断，但是不能对值进行比较，也就是没有一个强排序关系（例如“<”）。相反，基于树的查询结构则定义了key上的less than函数。
+
+2. 我们可以用B树的变种，B+树，它的区别在于我们只将卫星数据存放在叶结点。我们在每个叶结点上可以定义指向后继叶结点的指针，因而在形如“找到所有年龄大于42岁的雇员”的查询中，B树更为高效，而Hash表则需要对所有42岁以上的年龄进行查询。（假设我们针对年龄建立了索引）
+
+3. 
 
 <a name="Chapter5.4"></a>
 ### Merge-Find Set(用于不相交集合的并查集)
+
+这里摘录一个启发式的并查集设计，在这种带路径压缩和按秩合并的并查集上，每一个操作的摊还代价为O(α(n))，其中n是MAKE_SET操作的个数，α(n)是一个增长非常慢的函数，在任何一个我们可以想象的应用中，都有α(n) <= 4。证明详见CLRS。
+
+```cpp
+class Node {
+public:
+    Node *p;
+    int rank;
+};
+
+void MAKE_SET(Node *x) {
+    x->p = x;
+    x->rank = 0;
+}
+
+void UNION(Node *x, Node *y) {
+    LINK(FIND_SET(x), FIND_SET(y));
+}
+
+void LINK(Node *x, Node *y) {
+    if (x->rank > y->rank) {
+        y->p = x;
+    }
+    else {
+        x->p = y;
+        if (x->rank == y->rank) {
+            y->rank++;
+        }
+    }
+}
+
+Node* FIND_SET(Node *x) {
+    if (x != x->p) {
+        x->p = FIND_SET(x->p);
+    }
+    return x->p;
+}
+
+```
 
 <a name="Chapter6"></a>
 ## Graph(图算法)
