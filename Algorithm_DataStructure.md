@@ -24,6 +24,7 @@
     3. [Dijkstra's Algorithm(单源最短路径)](#Chapter6.3)
     4. [A* Algorithm(A-star启发式最短路径算法)](#Chapter6.4)
 7. [Selected Topics II(算法问题选编2)](#Chapter7)
+    1. [Single Number(孤独的数)](#Chapter7.1)
 
 <a name="Chapter1"></a>
 ## Selected Topics I(算法问题选编1)
@@ -516,7 +517,7 @@ B树的一个结点，就可以是一个页面大小。我们的算法在引用�
 <a name="Chapter5.4"></a>
 ### Merge-Find Set(用于不相交集合的并查集)
 
-这里摘录一个启发式的并查集设计，在这种带路径压缩和按秩合并的并查集上，每一个操作的摊还代价为O(α(n))，其中n是MAKE_SET操作的个数，α(n)是一个增长非常慢的函数，在任何一个我们可以想象的应用中，都有α(n) <= 4。证明详见CLRS。
+这里摘录一个启发式的并查集设计，在这种**带路径压缩和按秩合并**的并查集上，每一个操作的摊还代价为O(α(n))，其中n是MAKE_SET操作的个数，α(n)是一个增长非常慢的函数，在任何一个我们可以想象的应用中，都有α(n) <= 4。证明详见CLRS。
 
 ```cpp
 class Node {
@@ -580,3 +581,13 @@ if graph has edges then
 else 
     return L (a topologically sorted order)
 
+
+<a name="Chapter7"></a>
+### Selected Topics II (算法问题选编2)
+
+<a name="Chapter7.1"></a>
+## Single Number(孤独的数)
+
+[例1](https://leetcode.com/problems/single-number/)：给定一个数组A，除一个元素仅出现一次外，其他元素均出现2次。找到这个只出现一次的元素。
+
+[例2](https://leetcode.com/problems/single-number-ii/)：给定一个数组A，除一个元素仅出现一次外，其他元素均出现3次。找到这个只出现一次的元素。
