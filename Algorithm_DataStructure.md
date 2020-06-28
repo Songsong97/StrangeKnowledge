@@ -584,6 +584,7 @@ else
 
 <a name="Chapter7"></a>
 ## Selected Topics II (算法问题选编2)
+奇怪的知识二次增加！
 
 <a name="Chapter7.1"></a>
 ### Single Number(孤独的数)
