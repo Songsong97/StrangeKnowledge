@@ -25,9 +25,11 @@
     4. [A* Algorithm(A-star启发式最短路径算法)](#Chapter6.4)
 7. [Selected Topics II(算法问题选编2)](#Chapter7)
     1. [Single Number(孤独的数)](#Chapter7.1)
+    2. [First Missing Positive(第一个缺失的正整数)](#Chapter7.2)
+    3. [Copy List with Random Pointer(拷贝带随机指针的链表)](#Chapter7.3)
 
 <a name="Chapter1"></a>
-## Selected Topics I(算法问题选编1)
+## Selected Topics I (算法问题选编1)
 奇怪的知识增加了！！
 
 <a name="Chapter1.1"></a>
@@ -623,8 +625,22 @@ int singleNumber(vector<int>& nums) {
 }
 ```
 
-程序中one是低位计数器，two是高位计数器。为了更新低位计数器，我们将它和nums\[i]进行异或，得到按位的和，如果这时高位为0，则低位计数器置为异或的结果；否则，我们始终设低位为0，因为达到3时溢出为0。同理，我们可以更新高位。为了便于理解，我们还可以画出一个有限状态机，每个跳转以数组当前的值nums\[i]为输入。
+程序中one是计数器的低位，two是计数器的高位。为了更新计数器低位，我们将它和nums\[i]进行异或，得到按位的和，如果这时高位为0，则计数器低位被置为异或的结果；否则，我们始终设低位为0，因为达到3时计数器溢出。同理，我们可以更新高位。为了便于理解，我们还可以画出一个有限状态机，每个跳转以数组当前的值nums\[i]为输入。
 
-最后，由于出现3次的数，在每一位上贡献的计数值会溢出掉，留下的值即为仅出现一次的数。举一反三，我们还可以解类似的题目，除了孤独的数，其他数出现4次、5次或者更多。
+由于出现3次的数在每一位上贡献的计数值会溢出掉，留下的值即为仅出现一次的数。举一反三，我们还可以解类似的题目，除了孤独的数，其他数出现4次、5次或者更多。
 
 这种**按位计数**的思想可以运用在很多编程题目中。
+
+<a name="Chapter7.2"></a>
+### First Missing Positive(第一个缺失的正整数)
+
+**在这一节和下一节，我希望分享两道可以in-place完成的算法题目。解析请自行查阅。**
+
+题目链接：[LeetCode 41: First Missing Positive](https://leetcode.com/problems/first-missing-positive/)
+
+<a name="Chapter7.3"></a>
+### Copy List with Random Pointer(拷贝带随机指针的链表)
+
+题目链接：[LeetCode 138: Copy List with Random Pointer](https://leetcode.com/problems/copy-list-with-random-pointer/)
+
+与前一题类似，这道题初一看似乎是不可能完成的，但是我们依然有in-place的方法。
