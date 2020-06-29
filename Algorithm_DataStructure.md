@@ -643,4 +643,4 @@ int singleNumber(vector<int>& nums) {
 
 题目链接：[LeetCode 138: Copy List with Random Pointer](https://leetcode.com/problems/copy-list-with-random-pointer/)
 
-与前一题类似，这道题初一看似乎是不可能完成的，但是我们依然有in-place的方法。
+与前一题类似，这道题看似是不可能完成的，但是我们依然有in-place的方法。
