@@ -13,6 +13,7 @@
     1. [Task Scheduler (LeetCode 621)](#Chapter3.1)
 4. [Dynamic Programming(动态规划)](#Chapter4)
     1. [Longest Common Subsequence(最长公共子序列)](#Chapter4.1)
+    2. [Binary Knapsack Problem(0-1背包问题)](#Chapter4.2)
 5. [Data Structures(数据结构)](#Chapter5)
     1. [Heap(堆)](#Chapter5.1)
     2. [Red-Black Trees(红黑树)](#Chapter5.2)
@@ -27,6 +28,8 @@
     1. [Single Number(孤独的数)](#Chapter7.1)
     2. [First Missing Positive(第一个缺失的正整数)](#Chapter7.2)
     3. [Copy List with Random Pointer(拷贝带随机指针的链表)](#Chapter7.3)
+8. [Discrete Optimization(离散优化)](#Chapter8)
+    1. [Knapsack Problem(背包问题)](#Chapter8.1)
 
 <a name="Chapter1"></a>
 ## Selected Topics I (算法问题选编1)
@@ -346,6 +349,56 @@ int longestCommonSubsequence(string text1, string text2) {
 }
 ```
 
+<a name="Chapter4.2"></a>
+### Binary Knapsack Problem(0-1背包问题)
+给定n个物品，每个物品的价值为v<sub>i</sub>，重量为w<sub>i</sub>，背包最多可以装重量为K的物品，每个物品只能取1次或不取（0次）。找出我们能携带的物品价值的最大值。
+
+形式化地定义如下：
+
+![](./images/01knapsack.jpg)
+
+这里的dp数组是一个关于**当前可用容量j**和**前i个物品**的二维数组。对于每一个物品i，若我们可以把它放入背包，这时我们去考查**剩下的容量**和物品i之前的物品能达到的最大价值，即dp[i - 1][j - weights[i]]；我们也需要考查不将物品i放入背包的情况，即dp[i - 1][j]。若物品i不能被放入容量为j的背包，即weights[i] <= j，那么我们只考虑不将它放入背包的情况。
+
+```cpp
+int solveDP(const vector<int> &values, const vector<int> &weights, int capacity, vector<int> &take) {
+    vector<vector<int>> dp(values.size(), vector<int>(capacity + 1, 0));
+    
+    for (int i = 0; i < values.size(); i++) {
+        for (int j = 0; j <= capacity; j++) {
+            if (i == 0) {
+                dp[i][j] = weights[i] <= j ? values[i] : 0;
+            }
+            else if (weights[i] <= j) {
+                dp[i][j] = std::max(dp[i - 1][j], dp[i - 1][j - weights[i]] + values[i]);
+            }
+            else {
+                dp[i][j] = dp[i - 1][j];
+            }
+        }
+    }
+
+    for (int i = values.size() - 1, k = capacity; i >= 0; i--) {
+        if (i == 0) {
+            take[i] = dp[i][k] == 0 ? 0 : 1;
+        }
+        else if (dp[i][k] == dp[i - 1][k]) {
+            take[i] = 0;
+        }
+        else {
+            k -= weights[i];
+            take[i] = 1;
+        }
+    }
+
+    return dp[values.size() - 1][capacity];
+}
+
+```
+
+程序的第二个for循环用于重建我们找到的最优解。注意到，当dp[i][k] == dp[i - 1][k]时，物品i没有对我们的价值产生贡献，也就是说我们没有选它。该算法的时间复杂度为O(nK)。
+
+事实上，0-1背包问题是一个NP完全问题，动态规划算法只是一种伪多项式时间算法。考虑K在内存中的表示占用b位，因此背包容量的**输入规模**为b，算法的时间复杂度可以改写为O(n2<sup>b</sup>)。在[离散优化章节](#Chapter8.1)，我们将看到更多关于此问题的讨论。
+
 <a name="Chapter5"></a>
 ## Data Structures(数据结构)
 奇怪的知识持续增加。
@@ -514,7 +567,7 @@ B树的一个结点，就可以是一个页面大小。我们的算法在引用�
 
 2. 我们可以用B树的变种，B+树，它的区别在于我们只将卫星数据存放在叶结点。我们在每个叶结点上可以定义指向后继叶结点的指针，因而在形如“找到所有年龄大于42岁的雇员”的查询中，B树更为高效，而Hash表则需要对所有42岁以上的年龄进行查询。（假设我们针对年龄建立了索引）
 
-3. 
+3. Hash函数的随机性破坏了程序中数据的局部性，例如在形如“找到所有年龄大于42岁的雇员”的查询中，如果使用树结构的索引，那么我们找到年龄在42岁的雇员后，年龄在40岁~50岁的雇员数据已经在内存中，减少了磁盘I/O次数，而Hash表在找到年龄为42岁的雇员后，查找邻近的43岁的雇员数据，仍然可能引起缓存不命中。
 
 <a name="Chapter5.4"></a>
 ### Merge-Find Set(用于不相交集合的并查集)
@@ -644,3 +697,11 @@ int singleNumber(vector<int>& nums) {
 题目链接：[LeetCode 138: Copy List with Random Pointer](https://leetcode.com/problems/copy-list-with-random-pointer/)
 
 与前一题类似，这道题看似是不可能完成的，但是我们依然有in-place的方法。
+
+<a name="Chapter8"></a>
+## Discrete Optimization(离散优化)
+
+<a name="Chapter8.1"></a>
+### Knapsack Problem(背包问题)
+
+
