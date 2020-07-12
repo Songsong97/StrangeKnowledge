@@ -22,8 +22,8 @@
 6. [Graph(图算法)](#Chapter6)
     1. [Topological Sort(拓扑排序)](#Chapter6.1)
     2. [Strongly Connected Component(强连通分量)](#Chapter6.2)
-    3. [Dijkstra's Algorithm(单源最短路径)](#Chapter6.3)
-    4. [A* Algorithm(A-star启发式最短路径算法)](#Chapter6.4)
+    3. Dijkstra's Algorithm(单源最短路径)
+    4. A* Algorithm(A-star启发式最短路径算法)
 7. [Selected Topics II(算法问题选编2)](#Chapter7)
     1. [Single Number(孤独的数)](#Chapter7.1)
     2. [First Missing Positive(第一个缺失的正整数)](#Chapter7.2)
@@ -623,7 +623,7 @@ for (int neighbor : graph[node]) {
 ```
 
 遍历一个图有两个常见的方式，**深度优先搜索（DFS）**以及**广度优先搜索（BFS）**。
-1. DFS在每一个结点，往它的第一个后继邻居深入，当没有后继邻居时递归返回该结点的前驱结点，并搜索该结点的下一个后继邻居，以此类推。我们可以使用三种颜色来区分不同的结点：**白色**表示未发现的结点；**灰色**表示已经发现的结点，但他们的后继邻居存在*非黑色*的结点；黑色结点表示它的所有后继邻居都是黑色的，因此该结点的搜索也已经完成。结点的颜色，以及结点的发现时间和搜索完成时间是重要的信息，例如在拓扑排序中，颜色信息有助于我们判断图是否构成环，在强连通分量的计算中，时间信息帮助我们用一种优雅的方式进行计算。
+1. DFS在每一个结点，往它的第一个后继邻居深入，当没有后继邻居时递归返回该结点的前驱结点，并搜索该结点的下一个后继邻居，以此类推。我们可以使用三种颜色来区分不同的结点：**白色**表示未发现的结点；**灰色**表示已经发现的结点，但他们的后继邻居存在*非黑色*的结点；**黑色**结点表示它的所有后继邻居都是黑色的，因此该结点的搜索也已经完成。结点的颜色，以及结点的发现时间和搜索完成时间是重要的信息，例如在拓扑排序中，颜色信息有助于我们判断图是否构成环；在强连通分量的计算中，时间信息帮助我们用一种优雅的方式进行求解。
 2. BFS使用一个队列，优先搜索深度相同的结点，并按深度增加进行推进。
 
 CLRS对于这部分有详细的介绍。
@@ -777,5 +777,5 @@ int singleNumber(vector<int>& nums) {
 
 ![](/images/knapsackBranchBound.jpg)
 
-我使用Java进行编程，搜索过程实现为迭代的方式，该算法可以在较短时间内给出n = 10000, K = 1000000的最优解。同样的输入规模使用动态规划则触发内存不足异常。[完整源代码](https://github.com/Songsong97/Coursera_DiscreteOptimization/blob/master/knapsack/Solver.java)在这里。
+我使用Java进行编程，搜索过程实现为迭代的方式，该算法可以在较短时间内给出n = 10000, K = 1000000的最优解。同样的输入规模使用动态规划会触发内存不足异常。[完整源代码](https://github.com/Songsong97/Coursera_DiscreteOptimization/blob/master/knapsack/Solver.java)在这里。
 
