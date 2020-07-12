@@ -613,13 +613,61 @@ Node* FIND_SET(Node *x) {
 
 <a name="Chapter6"></a>
 ## Graph(图算法)
+程序中，图的表示一般有两种形式，**邻接矩阵**和**邻接表**。对于稀疏的图，邻接矩阵会浪费较多空间，使用邻接表更合适。例如：
+
+```cpp
+vector<vector<int>> graph; // 邻接表
+for (int neighbor : graph[node]) {
+    // neighbor is one of node's neighbors
+}
+```
+
+遍历一个图有两个常见的方式，**深度优先搜索（DFS）**以及**广度优先搜索（BFS）**。
+1. DFS在每一个结点，往它的第一个后继邻居深入，当没有后继邻居时递归返回该结点的前驱结点，并搜索该结点的下一个后继邻居，以此类推。我们可以使用三种颜色来区分不同的结点：**白色**表示未发现的结点；**灰色**表示已经发现的结点，但他们的后继邻居存在*非黑色*的结点；黑色结点表示它的所有后继邻居都是黑色的，因此该结点的搜索也已经完成。结点的颜色，以及结点的发现时间和搜索完成时间是重要的信息，例如在拓扑排序中，颜色信息有助于我们判断图是否构成环，在强连通分量的计算中，时间信息帮助我们用一种优雅的方式进行计算。
+2. BFS使用一个队列，优先搜索深度相同的结点，并按深度增加进行推进。
+
+CLRS对于这部分有详细的介绍。
 
 <a name="Chapter6.1"></a>
 ### Topological Sort(拓扑排序)
-用DFS
+先看[例题](https://leetcode.com/problems/course-schedule-ii/ "LeetCode 210: Course Schedule II")：给定一系列课程，每个课程有prerequisite，找出一个可行的排序使得我们按照prerequisite的要求修完所有课程。
+
+我们可以使用DFS解决该问题。注意到，对于某个当前正在搜索的结点（它现在被发现，因而被着成灰色），如果它的某个孩子也是灰色，则说明图中形成了环，不存在一个可行的解。
+
+```cpp
+vector<int> findOrder(int numCourses, vector<vector<int>>& prerequisites) {
+    vector<vector<int>> graph(numCourses, vector<int>());
+    for (vector<int> &p : prerequisites) {
+        graph[p[0]].push_back(p[1]);
+    }
+    vector<int> color(numCourses, 0);
+    vector<int> result;
+    for (int i = 0; i < numCourses; i++) {
+        if (color[i] == 0 && !dfs(graph, color, i, result)) {
+            return vector<int>();
+        }
+    }
+    return result;
+}
+bool dfs(const vector<vector<int>> &graph, vector<int> &color, int idx, vector<int> &result) {
+    color[idx] = 1;
+    for (int i = 0; i < graph[idx].size(); i++) {
+        if (color[graph[idx][i]] == 1) {
+            return false;
+        }
+        else if (color[graph[idx][i]] == 0 && !dfs(graph, color, graph[idx][i], result)) {
+            return false;
+        }
+    }
+    color[idx] = 2;
+    result.push_back(idx);
+    return true;
+}
+```
 
 或者，Kahn's algorithm：
 
+```
 L ← Empty list that will contain the sorted elements
 S ← Set of all nodes with no incoming edge
 
@@ -635,6 +683,13 @@ if graph has edges then
     return error (graph has at least one cycle)
 else 
     return L (a topologically sorted order)
+```
+
+<a name="Chapter6.2"></a>
+### Strongly Connected Component(强连通分量)
+使用two-pass DFS可以巧妙地求解强连通分量。
+
+
 
 
 <a name="Chapter7"></a>
@@ -687,7 +742,7 @@ int singleNumber(vector<int>& nums) {
 <a name="Chapter7.2"></a>
 ### First Missing Positive(第一个缺失的正整数)
 
-**在这一节和下一节，我希望分享两道可以in-place完成的算法题目。解析请自行查阅。**
+**在这一节和下一节，我希望分享两道可以in-place完成的算法题目。**
 
 题目链接：[LeetCode 41: First Missing Positive](https://leetcode.com/problems/first-missing-positive/)
 
