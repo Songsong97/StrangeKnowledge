@@ -687,10 +687,17 @@ else
 
 <a name="Chapter6.2"></a>
 ### Strongly Connected Component(强连通分量)
-使用two-pass DFS可以巧妙地求解强连通分量。
+使用两次DFS可以巧妙地求解强连通分量。
 
+我们定义图G的转置G<sup>T</sup> = (V, E<sup>T</sup>)，其中E<sup>T</sup> = {(u, v): (v, u) ∈ E}。也就是说，G的转置中，所有的边被反向。以下算法在O(V+E)时间内计算出强连通分量。
 
-
+```
+STRONGLY_CONNECTED_COMPONENT(G)
+1  call DFS(G) to compute finishing times u.f for each vertex u
+2  compute G_transpose
+3  call DFS(G_transpose), but in the main loop of DFS, consider the vertices in order of decreasing u.f
+4  output the vertices of each tree in the depth-first forest formed in line 3 as a separate strongly connected component
+```
 
 <a name="Chapter7"></a>
 ## Selected Topics II (算法问题选编2)
