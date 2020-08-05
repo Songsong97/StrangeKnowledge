@@ -28,7 +28,8 @@
     1. [Single Number(孤独的数)](#Chapter7.1)
     2. [First Missing Positive(第一个缺失的正整数)](#Chapter7.2)
     3. [Copy List with Random Pointer(拷贝带随机指针的链表)](#Chapter7.3)
-8. [Discrete Optimization(离散优化)](#Chapter8)
+    4. [Power of X(X的幂)](#Chapter7.4)
+8. [Discrete Optimization(浅尝离散优化)](#Chapter8)
     1. [Knapsack Problem(背包问题)](#Chapter8.1)
 
 <a name="Chapter1"></a>
@@ -760,8 +761,36 @@ int singleNumber(vector<int>& nums) {
 
 与前一题类似，这道题看似是不可能完成的，但是我们依然有in-place的方法。
 
+<a name="Chapter7.4"></a>
+### Power of X(X的幂)
+
+考虑X为质数(prime number)，如2,3,5,7等。给定一个数n，判断它是否为X的幂。
+
+[例1](https://leetcode.com/problems/power-of-three/)
+
+假设t是一个足够大(int表示范围内)的X的幂。我们对n进行质因数分解，如果n是X的幂，那么n的质因数只能是X，因此t%n==0.相反，若n不是X的幂，那么n的质因数还包括其他数，此时n不再能整除t。所以，t%n==0是n为X的幂的充要条件。例如X为3，那么我们取t=3^19=1162261467(因为3^20超过了INT_MAX)，代码如下。
+
+```cpp
+bool isPowerOfThree(int n) {
+    // 1162261467 is 3^19, and 3^20 is greater than INT_MAX
+    return (n > 0) && (1162261467 % n == 0);        
+}
+```
+
+[例2](https://leetcode.com/problems/power-of-four/)：判断一个数n是否为4的幂。
+
+这里我们不能用上述方法，因为一个很大的4的幂，也能被2整除，但显然2不是4的幂。我们可以用更准确的位运算来检查：观察4的幂的二进制表示，它只出现一个1，这些二进制表示相当于将1左移2k次(k=1,2,3...)。我们注意到，对任何一个数减1后，其最低位的1会退位变成0，因此，我们可以用(n&(n-1))==0来检测只有一位为1的数。
+
+然后，我们可以施加另一个限制，即1只能出现在第1位、第3位、第5位等奇数位置。于是，我们有(n&0x55555555)!=0.
+
+```cpp
+bool isPowerOfFour(int num) {
+    return (num > 0) && ((num & (num - 1)) == 0) && (num & 0x55555555);
+}
+```
+
 <a name="Chapter8"></a>
-## Discrete Optimization(离散优化)
+## Discrete Optimization(浅尝离散优化)
 这一类问题要求我们从一系列离散的输入中找到一个最优解。这里我们讨论的主要是NP完全问题，这些问题可以在多项式时间内被验证，但它和其他NP问题一样“不易解决”。
 
 <a name="Chapter8.1"></a>
