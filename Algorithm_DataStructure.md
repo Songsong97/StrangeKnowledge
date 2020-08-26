@@ -22,13 +22,14 @@
 6. [Graph(图算法)](#Chapter6)
     1. [Topological Sort(拓扑排序)](#Chapter6.1)
     2. [Strongly Connected Component(强连通分量)](#Chapter6.2)
-    3. [Dijkstra's Algorithm(单源最短路径)](#Chapter6.3)
-    4. [A* Algorithm(A-star启发式最短路径算法)](#Chapter6.4)
+    3. Dijkstra's Algorithm(单源最短路径)
+    4. A* Algorithm(A-star启发式最短路径算法)
 7. [Selected Topics II(算法问题选编2)](#Chapter7)
     1. [Single Number(孤独的数)](#Chapter7.1)
     2. [First Missing Positive(第一个缺失的正整数)](#Chapter7.2)
     3. [Copy List with Random Pointer(拷贝带随机指针的链表)](#Chapter7.3)
-8. [Discrete Optimization(离散优化)](#Chapter8)
+    4. [Power of X(X的幂)](#Chapter7.4)
+8. [Discrete Optimization(浅尝离散优化)](#Chapter8)
     1. [Knapsack Problem(背包问题)](#Chapter8.1)
 
 <a name="Chapter1"></a>
@@ -613,13 +614,61 @@ Node* FIND_SET(Node *x) {
 
 <a name="Chapter6"></a>
 ## Graph(图算法)
+程序中，图的表示一般有两种形式，**邻接矩阵**和**邻接表**。对于稀疏的图，邻接矩阵会浪费较多空间，使用邻接表更合适。例如：
+
+```cpp
+vector<vector<int>> graph; // 邻接表
+for (int neighbor : graph[node]) {
+    // neighbor is one of node's neighbors
+}
+```
+
+遍历一个图有两个常见的方式，**深度优先搜索（DFS）**以及**广度优先搜索（BFS）**。
+1. DFS在每一个结点，往它的第一个后继邻居深入，当没有后继邻居时递归返回该结点的前驱结点，并搜索该结点的下一个后继邻居，以此类推。我们可以使用三种颜色来区分不同的结点：**白色**表示未发现的结点；**灰色**表示已经发现的结点，但他们的后继邻居存在*非黑色*的结点；**黑色**结点表示它的所有后继邻居都是黑色的，因此该结点的搜索也已经完成。结点的颜色，以及结点的发现时间和搜索完成时间是重要的信息，例如在拓扑排序中，颜色信息有助于我们判断图是否构成环；在强连通分量的计算中，时间信息帮助我们用一种优雅的方式进行求解。
+2. BFS使用一个队列，优先搜索深度相同的结点，并按深度增加进行推进。
+
+CLRS对于这部分有详细的介绍。
 
 <a name="Chapter6.1"></a>
 ### Topological Sort(拓扑排序)
-用DFS
+先看[例题](https://leetcode.com/problems/course-schedule-ii/ "LeetCode 210: Course Schedule II")：给定一系列课程，每个课程有prerequisite，找出一个可行的排序使得我们按照prerequisite的要求修完所有课程。
+
+我们可以使用DFS解决该问题。注意到，对于某个当前正在搜索的结点（它现在被发现，因而被着成灰色），如果它的某个孩子也是灰色，则说明图中形成了环，不存在一个可行的解。
+
+```cpp
+vector<int> findOrder(int numCourses, vector<vector<int>>& prerequisites) {
+    vector<vector<int>> graph(numCourses, vector<int>());
+    for (vector<int> &p : prerequisites) {
+        graph[p[0]].push_back(p[1]);
+    }
+    vector<int> color(numCourses, 0);
+    vector<int> result;
+    for (int i = 0; i < numCourses; i++) {
+        if (color[i] == 0 && !dfs(graph, color, i, result)) {
+            return vector<int>();
+        }
+    }
+    return result;
+}
+bool dfs(const vector<vector<int>> &graph, vector<int> &color, int idx, vector<int> &result) {
+    color[idx] = 1;
+    for (int i = 0; i < graph[idx].size(); i++) {
+        if (color[graph[idx][i]] == 1) {
+            return false;
+        }
+        else if (color[graph[idx][i]] == 0 && !dfs(graph, color, graph[idx][i], result)) {
+            return false;
+        }
+    }
+    color[idx] = 2;
+    result.push_back(idx);
+    return true;
+}
+```
 
 或者，Kahn's algorithm：
 
+```
 L ← Empty list that will contain the sorted elements
 S ← Set of all nodes with no incoming edge
 
@@ -635,7 +684,21 @@ if graph has edges then
     return error (graph has at least one cycle)
 else 
     return L (a topologically sorted order)
+```
 
+<a name="Chapter6.2"></a>
+### Strongly Connected Component(强连通分量)
+使用两次DFS可以巧妙地求解强连通分量。
+
+我们定义图G的转置G<sup>T</sup> = (V, E<sup>T</sup>)，其中E<sup>T</sup> = {(u, v): (v, u) ∈ E}。也就是说，G的转置中，所有的边被反向。以下算法在O(V+E)时间内计算出强连通分量。
+
+```
+STRONGLY_CONNECTED_COMPONENT(G)
+1  call DFS(G) to compute finishing times u.f for each vertex u
+2  compute G_transpose
+3  call DFS(G_transpose), but in the main loop of DFS, consider the vertices in order of decreasing u.f
+4  output the vertices of each tree in the depth-first forest formed in line 3 as a separate strongly connected component
+```
 
 <a name="Chapter7"></a>
 ## Selected Topics II (算法问题选编2)
@@ -687,7 +750,7 @@ int singleNumber(vector<int>& nums) {
 <a name="Chapter7.2"></a>
 ### First Missing Positive(第一个缺失的正整数)
 
-**在这一节和下一节，我希望分享两道可以in-place完成的算法题目。解析请自行查阅。**
+**在这一节和下一节，我希望分享两道可以in-place完成的算法题目。**
 
 题目链接：[LeetCode 41: First Missing Positive](https://leetcode.com/problems/first-missing-positive/)
 
@@ -698,8 +761,36 @@ int singleNumber(vector<int>& nums) {
 
 与前一题类似，这道题看似是不可能完成的，但是我们依然有in-place的方法。
 
+<a name="Chapter7.4"></a>
+### Power of X(X的幂)
+
+考虑X为质数(prime number)，如2,3,5,7等。给定一个数n，判断它是否为X的幂。
+
+[例1. LeetCode 326: Power of Three](https://leetcode.com/problems/power-of-three/)
+
+假设t是一个足够大(int表示范围内)的X的幂。我们对n进行质因数分解，如果n是X的幂，那么n的质因数只能是X，因此t%n==0.相反，若n不是X的幂，那么n的质因数还包括其他数，此时n不再能整除t。所以，t%n==0是n为X的幂的充要条件。例如X为3，那么我们取t=3^19=1162261467(因为3^20超过了INT_MAX)，代码如下。
+
+```cpp
+bool isPowerOfThree(int n) {
+    // 1162261467 is 3^19, and 3^20 is greater than INT_MAX
+    return (n > 0) && (1162261467 % n == 0);        
+}
+```
+
+[例2](https://leetcode.com/problems/power-of-four/)：判断一个数n是否为4的幂。
+
+这里我们不能用上述方法，因为一个很大的4的幂，也能被2整除，但显然2不是4的幂。我们可以用更准确的**位运算**来检查：观察4的幂的二进制表示，它只出现一个1，这些二进制表示相当于将1左移2k次(k=1,2,3...)。我们注意到，对任何一个数减1后，其最低位的1会退位变成0，因此，我们可以用(n&(n-1))==0来检测只有一位为1的数。
+
+然后，我们可以施加另一个限制，即1只能出现在第1位、第3位、第5位等奇数位置。于是，我们有(n&0x55555555)!=0.
+
+```cpp
+bool isPowerOfFour(int num) {
+    return (num > 0) && ((num & (num - 1)) == 0) && (num & 0x55555555);
+}
+```
+
 <a name="Chapter8"></a>
-## Discrete Optimization(离散优化)
+## Discrete Optimization(浅尝离散优化)
 这一类问题要求我们从一系列离散的输入中找到一个最优解。这里我们讨论的主要是NP完全问题，这些问题可以在多项式时间内被验证，但它和其他NP问题一样“不易解决”。
 
 <a name="Chapter8.1"></a>
@@ -722,5 +813,5 @@ int singleNumber(vector<int>& nums) {
 
 ![](/images/knapsackBranchBound.jpg)
 
-我使用Java进行编程，搜索过程实现为迭代的方式，该算法可以在较短时间内给出n = 10000, K = 1000000的最优解。同样的输入规模使用动态规划则触发内存不足异常。[完整源代码](https://github.com/Songsong97/Coursera_DiscreteOptimization/blob/master/knapsack/Solver.java)在这里。
+我使用Java进行编程，搜索过程实现为迭代的方式，该算法可以在较短时间内给出n = 10000, K = 1000000的最优解。同样的输入规模使用动态规划会触发内存不足异常。[完整源代码](https://github.com/Songsong97/Coursera_DiscreteOptimization/blob/master/knapsack/Solver.java)在这里。
 
