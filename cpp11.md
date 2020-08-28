@@ -17,8 +17,9 @@
 9. [decltype与typeid](#Chapter9)
 10. [nullptr](#Chapter10)
 11. [lambda函数](#Chapter11)
-12. [std::array]
-13. [std::optional]
+12. [一些有用的特性](#Chapter12)
+    1. [std::array](#Chapter12.1)
+    2. [std::optional](#Chapter12.2)
 
 <a name="Chapter1"></a>
 ## 设计目标
@@ -88,7 +89,7 @@ X<1 >> 5> x;
 对于上述代码，C++98会认为连续的右尖括号是位移符号，因此结果是一个形如X<0> x的模板实例。而C++11会优先将遇到的第一个>与此前的<配对，导致编译错误。避免的方式是用圆括号将"1>>5"括起来。
 
 <a name="Chapter5"></a>
-## 右值引用：移动语义和完美转发
+## 右值引用：移动语义
 为了讲清楚右值引用以及移动语义等概念的实际意义，我们先用一些典型场景来引出C++编程中的一些实际问题。
 
 考虑如下一段代码：
@@ -312,9 +313,203 @@ if (c != nullptr) {
 
 <a name="Chapter7"></a>
 ## 基于范围的for循环
+C++11引入了基于范围的for循环，例如：
+```cpp
+vector<int> vec = {1, 2, 3, 4, 5};
+for (int &a : vec) {
+    a += 10;
+}
+for (auto a : vec) {
+    cout << a << endl;
+}
+```
 
+是否能使用基于范围的for循环，必须依赖一些条件。首先，for循环迭代的范围是确定的，对于类来说需要有begin和end函数，而对于数组而言需要第一个和最后一个元素间的范围确定。其次，基于范围的for循环还要求迭代的对象实现++和==操作符。对于标准库中的容器，如string, array, vector, deque, list, queue, map, set等，不会有问题。
 
+<a name="Chapter8"></a>
+## auto类型推导
+C++11提供了简单易用的auto，进行类型推导。我们通过下面的例子看看auto类型推导的基本用法。
+```cpp
+int main() {
+    double foo();
+    auto x = 1; // x的类型为int
+    auto y = foo(); // y的类型为double
+    struct m { int i; }str;
+    auto str1 = str; // str1的类型是struct m
+    
+    auto z; // 无法推导，无法通过编译
+    z = x;
+}
+```
 
+auto并非一种“类型”声明，而是一个类型声明时的“占位符”，编译器在编译时将auto替代为变量实际的类型。
 
+auto的一大优势在于简化代码，在前面的部分我们看到了它可以在基于范围的for循环内，推导出容器中每个对象的类型。另外，当我们使用某些容器的迭代器时，我们往往要写很冗长的代码，而用auto则可以简化这种代码。如下所示。
 
+```cpp
+void printStringList(std::list<std::string> &sl) {
+    std::list<std::string>::iterator it = sl.begin();
+    while (it != sl.end()) {
+    	std::cout << *it << std::endl;
+    	it++;
+    }
+    
+    // instead
+    for (auto it = sl.begin(); it != sl.end(); it++) {
+        std::cout << *it << std::endl;
+    }
+}
+```
 
+事实上，auto只是C++11中类型推导的一部分，其余的则会在decltype中得到体现。
+
+<a name="Chapter9"></a>
+## decltype与typeid
+我们可以在程序中使用typeid随时查询一个变量的类型，typeid就会返回变量相应的type_info数据。type_info的name()会返回类的名字，而hash_code()会返回该类型唯一的哈希值，以供我们对变量的类型进行比较。
+
+```cpp
+#include <iostream>
+#include <typeinfo>
+
+using namespace std;
+
+class White {};
+class Black {};
+
+int main() {
+    White a;
+    Black b;
+    cout << typeid(a).name() << endl;
+    cout << typeid(b).name() << endl;    
+    cout << "a and b same type? " << (typeid(a).hash_code() == typeid(b).hash_code()) << endl;
+}
+```
+
+与auto相同的是，decltype也可以用于类型推导，并且可以将获得的类型用以定义另外一个变量。例如：
+
+```cpp
+#include <iostream>
+#include <typeinfo>
+using namespace std;
+
+int main() {
+    int i;
+    decltype(i) j = 0;
+    cout << typeid(j).name() << endl; // g++打印出"i"
+    
+    float a;
+    double b;
+    decltype(a + b) c;
+    cout << typeid(c).name() << endl; // g++打印出"d"
+}
+```
+
+<a name="Chapter10"></a>
+## nullptr
+由于0和NULL的二义性，字面常量0既可以是0，也可以是一个无类型指针，因此会导致错误的重载函数被调用等问题。
+
+现在，我们有了nullptr来避免二义性，它是一个所谓“指针空值类型”的常量。并且与以往先定义类型再通过类型声明值的做法完全相反，nullptr的类型nullptr_t是如下定义的：
+
+```cpp
+typedef decltype(nullptr) nullptr_t;
+```
+这种方式非常有趣，充分利用了decltype的功能。
+
+<a name="Chapter11"></a>
+## lambda函数
+这里我们只介绍一些基本的例子，对于详细的使用规则请参阅官方说明。
+
+```cpp
+int main() {
+    int girls = 3, boys = 4;
+    auto totalChildren = [](int x, int y)->int{ return x + y; };
+    return totalChildren(girsl, boys);
+}
+```
+
+该lambda函数起到了求和的一个效果。
+
+通常情况下，lambda函数的语法定义如下：
+
+```
+[capture](parameters) mutable ->return-type{statement}
+```
+
+```[capture]```为捕捉列表。[]相当于lambda引出符，编译器根据该引出符判断接下来的代码是否为lambda函数。捕捉列表可捕捉上下文中的变量以供lambda函数使用。
+
+```(parameters)```为参数列表。如果不需要参数，则可以连同括号()一起省略。
+
+```mutable```为mutable修饰符。默认情况下lambda是const函数，mutable可以取消其常量性。在使用该修饰符时，参数列表不可省略（即使参数为空）。
+
+```->return-type```为返回类型，若不需要返回值或者在返回类型明确的情况下，可以省略。
+
+```{statement}```为函数体。它可以使用捕获的变量。
+
+再看一个典型的例子：
+
+```cpp
+vector<int> vec = {1, 3, 5, 2, 4};
+sort(vec.begin(), vec.end(), [](const int& a, const int& b){ return a > b; });
+```
+
+这里，我们调用的sort函数加入了第三个参数comp，也就是用于比较的函数。现在，sort将按递减的顺序排序。另一个使用priority_queue的例子如下所示，注意我们对auto和decltype的利用。
+
+```cpp
+int main() {
+    auto cmp = [](pair<int, int> &a, pair<int, int> &b) {
+    	return a.second > b.second;
+    };
+    priority_queue<pair<int, int>, vector<pair<int, int>>, decltype(cmp)> que(cmp);
+    
+    pair<int, int> p1(1, 2);
+    pair<int, int> p2(2, 3);
+    pair<int, int> p3(4, 1);
+    for (auto p : { p1, p2, p3 }) {
+    	que.push(p);
+    }
+    
+    while (!que.empty()) {
+    	cout << que.top().first << " " << que.top().second << endl;
+    	que.pop();
+    }
+}
+```
+
+程序打印结果：
+
+```
+4 1
+1 2
+2 3
+```
+
+在C++11之前，我们在使用STL算法时，通常会用到一种函数对象，即仿函数(functor)。例如：
+
+```cpp
+class _functor {
+public:
+    int operator() (int x, int y) { return x + y; }
+};
+
+int main() {
+    int girls = 3, boys = 4;
+    _functor totalChildren;
+    return totalChildren(girls, boys);
+}
+```
+
+这样的仿函数也可以用于比较函数的编写，而使用lambda函数则可以取代这样的仿函数。
+
+此外，通过捕捉列表，我们可以实现类似于“局部函数”的效果。这部分内容请读者自查。
+    
+<a name="Chapter12"></a>
+## 一些有用的特性
+这里列举一些有用的特性，详细内容请查阅官方文档。
+
+<a name="Chapter12.1"></a>
+### std::array
+std::array提供了类似于普通数组的一个封装容器。
+
+<a name="Chapter12.2"></a>
+### std::optional
+std::optional类型的数据可以表示数据是否存在，这种类型常用于返回值的函数失败的情景。
