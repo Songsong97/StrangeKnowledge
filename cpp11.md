@@ -1,4 +1,4 @@
-# cpp11
+# C++11
 奇怪的知识增加了！！！
 ## Table of contents
 1. [设计目标](#Chapter1)
