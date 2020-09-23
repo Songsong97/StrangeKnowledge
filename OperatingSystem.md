@@ -34,6 +34,7 @@ int main() {
 A simple workaround for this issue if you do want to shut the process in helper, is to pass the pointer to the helper and free the memory before we exit.
 
 ```cpp
+// ...
 void helper(int *p) {
     pid_t pid;
     if ((pid = fork()) == 0) {
