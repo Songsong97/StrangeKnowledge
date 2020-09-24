@@ -53,7 +53,7 @@ int main() {
 }
 ```
 
-## Using PIPE to communicate
+## Using pipe to communicate
 In unix like systems, a pipe or pipeline is a mechanism for inter-process communication using FIFO message passing.
 
 ### Communicate between processes
@@ -93,7 +93,7 @@ int main() {
 
 The end of the pipe is actually regarded as file decriptor in Unix. That's also why we can use fdopen() to create a FILE pointer. When the process exits, all file descriptors will be closed by the operating system.
 
-### Communication between threads
+### Communicate between threads
 It is similar to use pipe for communication between threads, but it is tricky because all threads in a single process share the same address space. We should be cautious of this, especially when passing a pointer argument.
 
 ```cpp
