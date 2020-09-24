@@ -119,11 +119,12 @@ int main() {
 }
 ```
 
-Each thread has its unique stack pointer, but all threads here share the same address space. So, A pointer to the variable i will have the same address value. Since threads run concurrently, the value of i could change before it is read to id of each thread.
+Each thread has its unique stack pointer, but all threads here share the same address space. So, pointers to the variable i will have the same address value. Since threads run concurrently, the value of i could change before it is read to id of each thread.
 
 A solution for this is to store the value passed to each thread in different places.
 
 ```cpp
+// ...
 int main() {
     pthread_t threads[10];
     int arguments[10];
