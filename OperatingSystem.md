@@ -86,8 +86,8 @@ int main() {
     
     while (true) {
         struct sockaddr_in clientaddr;
-		socklen_t clientaddrlen = sizeof(clientaddr);
-		int comm_fd = accept(listen_fd, (struct sockaddr*)&clientaddr, &clientaddrlen);
+        socklen_t clientaddrlen = sizeof(clientaddr);
+        int comm_fd = accept(listen_fd, (struct sockaddr*)&clientaddr, &clientaddrlen);
         pthread_t tid;
         
         // Create a new thread to handle this connection
@@ -105,7 +105,7 @@ The main challenge here is that when a SIGINT is received, it is not certain whi
 #include <pthread.h>
 
 void sigusr1Handler(int arg) {
-	pthread_exit(0);
+    pthread_exit(0);
 }
 
 void sigintHandler(int arg) {
@@ -117,9 +117,9 @@ void sigintHandler(int arg) {
     int selfTID = pthread_self();
     for (pthread_t tid : threadIDs) {
     	if (selfTID != tid) {
-    		pthread_kill(tid, SIGUSR1);
+            pthread_kill(tid, SIGUSR1);
             void *status;
-    		pthread_join(tid, &status);
+            pthread_join(tid, &status);
     	}
     }
     
@@ -135,15 +135,15 @@ void *threadWorker(void *arg) {
 }
 
 int main() {
-	signal(SIGINT, sigintHandler);
+    signal(SIGINT, sigintHandler);
     signal(SIGUSR1, sigusr1Handler);
 
     // listen_fd is created here
     
     while (true) {
         struct sockaddr_in clientaddr;
-		socklen_t clientaddrlen = sizeof(clientaddr);
-		int comm_fd = accept(listen_fd, (struct sockaddr*)&clientaddr, &clientaddrlen);
+        socklen_t clientaddrlen = sizeof(clientaddr);
+        int comm_fd = accept(listen_fd, (struct sockaddr*)&clientaddr, &clientaddrlen);
         pthread_t tid;
         
         // Create a new thread to handle this connection
