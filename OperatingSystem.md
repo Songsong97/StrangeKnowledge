@@ -5,9 +5,10 @@ Random Notes
 1. [Memory Leak](#Chapter1)
     1. [Still reachable memory](#Chapter1.1)
     2. [Possibly lost memory](#Chapter1.2)
-2. [Using pipe to communicate](#Chapter2)
-    1. [Communicate between processes](#Chapter2.1)
-    2. [Communicate between threads](#Chapter2.2)
+2. [Inter-process communication](#Chapter2)
+    1. [Communicate between processes using pipe](#Chapter2.1)
+    2. [Communicate between threads using pipe](#Chapter2.2)
+    3. [Socket and SIGPIPE](#Chapter2.3)
 
 <a name="Chapter1"></a>
 ## Memory Leak
@@ -153,11 +154,17 @@ int main() {
 ```
 
 <a name="Chapter2"></a>
-## Using pipe to communicate
-In unix like systems, a pipe or pipeline is a mechanism for inter-process communication using FIFO message passing.
+## Inter-process communication
+Some mechanism of inter-process communication will be briefly introduced here.
+1. signal(in the previous chapter)
+2. pipe
+3. socket
 
 <a name="Chapter2.1"></a>
-### Communicate between processes
+### Communicate between processes using pipe
+
+In unix like systems, a pipe or pipeline is a mechanism for inter-process communication using FIFO message passing.
+
 ```cpp
 #include <unistd.h>
 #include <sys/types.h>
@@ -195,7 +202,7 @@ int main() {
 The end of the pipe is actually regarded as file decriptor in Unix. That's also why we can use fdopen() to create a FILE pointer. When the process exits, all file descriptors will be closed by the operating system.
 
 <a name="Chapter2.2"></a>
-### Communicate between threads
+### Communicate between threads using pipe
 It is similar to use pipe for communication between threads, but it is tricky because all threads in a single process share the same address space. We should be cautious of this, especially when passing a pointer argument.
 
 ```cpp
@@ -241,3 +248,9 @@ int main() {
     }
 }
 ```
+
+<a name="Chapter2.3"></a>
+### Socket and SIGPIPE
+Socket is another way for inter-process communication and can be used for internet communication with TCP or UDP. Similar to a pipe, it is using file descriptor to identify the target of communication. But unlike a pipe, the communication of socket is two-way, which means you can not only read but also write to another process.
+
+When a process attempts to write to a socket that is no longer open for reading, it will receive a SIGPIPE signal, meaning "broken pipe". This broken status can also be detected by the write() function with a negative return value. Since the default action of receiving SIGPIPE is to terminate the process, it is convenient for some applications to just ignore this signal using ```signal(SIGPIPE, SIG_IGN);``` and check the return value of write() function.
