@@ -28,6 +28,41 @@
 
 1. [Variadic functions(带可变数量参数的函数)](https://en.cppreference.com/w/cpp/utility/variadic)。类似的，有[Variadic Macros(可变数量参数的宏定义)](https://gcc.gnu.org/onlinedocs/cpp/Variadic-Macros.html)。
 2. Stringizing operator (#) 和 Token-pasting operator (##)
+3. __LINE__ macro
+
+```
+#include <iostream>
+#include <string>
+#include <vector>
+
+using namespace std;
+
+#define concat(x, y) x##y
+#define compute(x) MyClass ms(x);\
+    ms.computeStr();
+
+
+class MyClass {
+public:
+	int val;
+	MyClass(int x) : val(x) {}
+	void computeStr() {
+		cout << to_string(val) + to_string(__LINE__);
+	}
+};
+
+int main() {
+	// place holder
+	// place holder
+	// place holder
+	// place holder
+	// place holder
+	// place holder
+	compute(1);
+	string GivenNameFamilyName = "Jilin Liu";
+	cout << concat(GivenName, FamilyName) << endl;
+}
+```
 
 <a name="Chapter1"></a>
 ## 设计目标
