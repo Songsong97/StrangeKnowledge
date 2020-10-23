@@ -28,7 +28,7 @@
 
 1. [Variadic functions(带可变数量参数的函数)](https://en.cppreference.com/w/cpp/utility/variadic)。类似的，有[Variadic Macros(可变数量参数的宏定义)](https://gcc.gnu.org/onlinedocs/cpp/Variadic-Macros.html)。
 2. Stringizing operator (#) 和 Token-pasting operator (##)
-3. __LINE__ macro
+3. \_\_LINE\_\_ macro
 
 ```
 #include <iostream>
