@@ -1,6 +1,7 @@
 # C++11
 奇怪的知识增加了！！！
 ## Table of contents
+0. [奇怪的cpp知识](#Chapter0)
 1. [设计目标](#Chapter1)
 2. [long long整型](#Chapter2)
 3. [快速初始化成员变量](#Chapter3)
@@ -20,6 +21,13 @@
 12. [一些有用的特性](#Chapter12)
     1. [std::array](#Chapter12.1)
     2. [std::optional](#Chapter12.2)
+
+<a name="Chapter0"></a>
+## 奇怪的cpp知识
+这里补充一些cpp的特性（并不是C++11所独有的），他们在大型项目中比较常见，但刷题不容易用到。
+
+1. [Variadic functions(带可变数量参数的函数)](https://en.cppreference.com/w/cpp/utility/variadic)。类似的，有[Variadic Macros(可变数量参数的宏定义)](https://gcc.gnu.org/onlinedocs/cpp/Variadic-Macros.html)。
+2. Stringizing operator (#) 和 Token-pasting operator (##)
 
 <a name="Chapter1"></a>
 ## 设计目标
