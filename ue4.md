@@ -57,7 +57,7 @@ TGraphTask::ExecuteTask(TArray<FBaseGraphTask*>& NewTasks, ENamedThreads::Type C
 FNamedTaskThread::ProcessTasksNamedThread(int32 QueueIndex, bool bAllowStall)
 ```
 
-ue的一些类实现了AddRef()和Release()，并且在构造函数中调用AddRef()，如此便统计了对象被引用的次数，用于Garbage Collection。
+ue的一些类实现了AddRef()和Release()，并且在smart pointer的构造函数中调用AddRef()，如此便统计了对象被引用的次数，用于Garbage Collection。
 
 [这里](https://docs.unrealengine.com/en-US/Programming/Rendering/ThreadedRendering/index.html)给出了更多有关两个线程之间协作的参考。
 
