@@ -22,7 +22,7 @@ class FMobileSceneRenderer : public FSceneRenderer { //... }
 
 
 
-### call stack
+### Call Stack
 ```cpp
 FDeferredShadingSceneRenderer::Render(FRHICommandListImmediate & RHICmdList);
 RenderViewFamily_RenderThread(FRHICommandListImmediate & RHICmdList, FSceneRenderer * SceneRenderer);
@@ -43,4 +43,9 @@ void FDeferredShadingSceneRenderer::Render(FRHICommandListImmediate& RHICmdList)
 static void RenderViewFamily_RenderThread(FRHICommandListImmediate& RHICmdList, FSceneRenderer* SceneRenderer) { //... }
 ```
 
-//TODO 看RenderViewFamily_RenderThread的render thread是不是主线程开启的
+### TODO
+看RenderViewFamily_RenderThread的render thread是不是主线程开启的
+
+what is a hit proxy?
+
+
