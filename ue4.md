@@ -42,6 +42,26 @@ void FDeferredShadingSceneRenderer::Render(FRHICommandListImmediate& RHICmdList)
  */
 static void RenderViewFamily_RenderThread(FRHICommandListImmediate& RHICmdList, FSceneRenderer* SceneRenderer) { //... }
 ```
+### 杂乱笔记
+
+The primary method of communication between the two threads is through the ENQUEUE_UNIQUE_RENDER_COMMAND_XXXPARAMETER macro。这类似于FIFO的PIPE进行线程间的通信。
+
+调用关系
+```
+void RenderViewFamily_RenderThread()
+^
+TEnqueueUniqueRenderCommandType::DoTask(ENamedThreads::Type CurrentThread, const FGraphEventRef& MyCompletionGraphEvent);
+^
+TGraphTask::ExecuteTask(TArray<FBaseGraphTask*>& NewTasks, ENamedThreads::Type CurrentThread) override
+^
+FNamedTaskThread::ProcessTasksNamedThread(int32 QueueIndex, bool bAllowStall)
+```
+
+ue的一些类实现了AddRef()和Release()，并且在构造函数中调用AddRef()，如此便统计了对象被引用的次数，用于Garbage Collection。
+
+[这里](https://docs.unrealengine.com/en-US/Programming/Rendering/ThreadedRendering/index.html)给出了更多有关两个线程之间协作的参考。
+
+ProcessTasksNamedThread可以在不同的线程中执行，例如GameThread和RenderThread
 
 ### TODO
 看RenderViewFamily_RenderThread的render thread是不是主线程开启的
