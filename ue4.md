@@ -63,6 +63,11 @@ ue的一些类实现了AddRef()和Release()，并且在smart pointer的构造函
 
 ProcessTasksNamedThread可以在不同的线程中执行，例如GameThread和RenderThread
 
+### RenderDoc
+一款非常实用的工具。可以查看API的Draw Event等。在我的Windows系统上，Unreal使用的图形API为D3D11。
+
+在Unreal的代码中，```FRDGBuilder& GraphBuilder```提供了加入Render Pass的函数```AddPass()```。结合我们写的shader，就可以将渲染任务发送给GPU。我们可以传入```RDG_EVENT_NAME("Custom Shader")```作为Event Name，这样它就可以在RenderDoc中以Custom Shader的名字出现。我们可以查看其输出的Buffer或Texture。
+
 ### TODO
 看RenderViewFamily_RenderThread的render thread是不是主线程开启的
 
