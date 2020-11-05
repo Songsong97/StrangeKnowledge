@@ -1,5 +1,5 @@
 # Operating System
-Random Notes
+Some notes for operating systems and cpp programming in Unix.
 
 ## Table of contents
 1. [Memory Leak](#Chapter1)
@@ -69,7 +69,7 @@ int main() {
 
 <a name="Chapter1.2"></a>
 ### Possibly lost memory
-As noted in the Valgrind manual page, it will detect pointers that could point into the middle of an allocated block and in most case, this should be interpreted as memory leak. It is not so intuitive at the first glance what makes this happen, but here I will show just a typical situation with the use of threads.
+As noted in the Valgrind manual page, it will detect pointers that could point into the middle of an allocated block and in most case, this should be interpreted as memory leak. It is not so intuitive at the first glance what makes this happen, but here I will just show a typical situation with the use of threads.
 
 ```cpp
 #include <iostream>
@@ -99,7 +99,7 @@ int main() {
 
 This is a basic architecture for a thread-based server. When a new connection is accepted, the main thread will spawn a new thread to handle this connection. Suppose the administrater may press Ctrl+C to end the server. In that case, a SIGINT will be sent to the process, which will terminate the whole process. If that happens, the program will exit without reclaiming resources allocated to the child threads, and that will cause the possibly lost memory allocated in pthread_create().
 
-One way to solve this issue is to use ```signal(SIGINT, sigintHandler)``` to register the process to use our own handler for SIGINT. The main challenge here is that when a SIGINT is received, it is not certain which thread will actually run the signal handler. But we can use pthread_self() to identify the current thread ID, then we can send user defined signal to other threads and that signal, e.g. SIGUSR1, can be handled by another handler. The handler for SIGUSR1 will simply call pthread_exit(0), while the handler for SIGINT will wait for all other threads to exit and free any resources until it shuts the entire program. Also note that the default behavior of a threading receiving SIGUSR1 is to exit its execution, which means a handler for SIGUSR1 is not necessary here.
+One way to solve this issue is to use ```signal(SIGINT, sigintHandler)``` to register the process to use our own handler for SIGINT. The main challenge here is that when a SIGINT is received, it is not certain which thread will actually run the signal handler. But we can use pthread_self() to identify the current thread ID, then we can send user defined signal to other threads and that signal, e.g. SIGUSR1, can be handled by another handler. The handler for SIGUSR1 will simply call pthread_exit(0), while the handler for SIGINT will wait for all other threads to exit and free any resources until it shuts the entire program. Also note that the default behavior of a threading receiving SIGUSR1 is to exit its execution.
 
 ```cpp
 #include <iostream>
