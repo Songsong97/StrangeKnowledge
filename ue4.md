@@ -7,6 +7,7 @@ quick notes for ue4 source code walk through
 \UnrealEngine\Engine\Source\Runtime\Renderer\Private\VelocityRendering.cpp **渲染物体速度，用于TemporalAA，MotionBlur等**
 \UnrealEngine\Engine\Source\Runtime\Renderer\Private\PostProcess\PostProcessing.cpp
 \UnrealEngine\Engine\Source\Runtime\RHI\Public\RHICommandList.h **Render Hardware Interface，很多Draw Call的接口**
+\UnrealEngine\Engine\Source\Runtime\RenderCore\Public\RenderGraphResources.h **包含FRDGTexture（Render graph tracked Texture）等**
 
 ### RenderDoc
 一款非常实用的工具。可以查看API的Draw Event等。在我的Windows系统上，Unreal使用的图形API为D3D11。
