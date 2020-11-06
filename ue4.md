@@ -2,12 +2,19 @@ quick notes for ue4 source code walk through
 
 ### Useful Code Snippets
 \UnrealEngine\Engine\Source\Runtime\RHI\Private\RHIGPUReadback.cpp **从GPU读回数据（例如Buffer, Texture）**
+
 \UnrealEngine\Engine\Source\Runtime\Renderer\Private\DeferredShadingRenderer.cpp
+
 \UnrealEngine\Engine\Source\Runtime\Core\Public\Misc\AssertionMacros.h **Unreal Engine 4 (UE4) provides three different families of assert equivalents: check, verify, and ensure**
+
 \UnrealEngine\Engine\Source\Runtime\Renderer\Private\VelocityRendering.cpp **渲染物体速度，用于TemporalAA，MotionBlur等**
+
 \UnrealEngine\Engine\Source\Runtime\Renderer\Private\PostProcess\PostProcessing.cpp
+
 \UnrealEngine\Engine\Source\Runtime\RHI\Public\RHICommandList.h **Render Hardware Interface，很多Draw Call的接口**
+
 \UnrealEngine\Engine\Source\Runtime\RenderCore\Public\RenderGraphResources.h **包含FRDGTexture（Render graph tracked Texture）等**
+
 E:\Projects\zhenluo\UnrealEngine\Engine\Source\Runtime\Renderer\Private\ScreenPass.cpp **包含AddDrawScreenPass，AddDrawTexturePass等**
 
 ### RenderDoc
