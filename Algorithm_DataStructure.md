@@ -31,6 +31,7 @@
     4. [Power of X(X的幂)](#Chapter7.4)
 8. [Discrete Optimization(浅尝离散优化)](#Chapter8)
     1. [Knapsack Problem(背包问题)](#Chapter8.1)
+    2. [Other Topics(其他问题)](#Chapter8.2)
 
 <a name="Chapter1"></a>
 ## Selected Topics I (算法问题选编1)
@@ -815,3 +816,6 @@ bool isPowerOfFour(int num) {
 
 我使用Java进行编程，搜索过程实现为迭代的方式，该算法可以在较短时间内给出n = 10000, K = 1000000的最优解。同样的输入规模使用动态规划会触发内存不足异常。[完整源代码](https://github.com/Songsong97/Coursera_DiscreteOptimization/blob/master/knapsack/Solver.java)在这里。
 
+<a name="Chapter8.2"></a>
+### Other Topics(其他问题)
+这个[仓库](https://github.com/Songsong97/Coursera_DiscreteOptimization)包含了我在Coursera上面离散优化的作业，包含了源代码和一些简单的思路。
