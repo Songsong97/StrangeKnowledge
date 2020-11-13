@@ -19,6 +19,10 @@ quick notes for ue4 source code walk through
 
 \UnrealEngine\Engine\Source\Runtime\RenderCore\Public\RendererInterface.h **包含 struct FPooledRenderTargetDesc**
 
+\UnrealEngine\Engine\Source\Runtime\Engine\Public\SceneView.h
+
+\UnrealEngine\Engine\Source\Runtime\Core\Public\Math\PerspectiveMatrix.h
+
 ### RenderDoc
 一款非常实用的工具。可以查看API的Draw Event等。在我的Windows系统上，Unreal使用的图形API为D3D11。
 
