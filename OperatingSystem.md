@@ -9,6 +9,9 @@ Some notes for operating systems and cpp programming in Unix.
     1. [Communicate between processes using pipe](#Chapter2.1)
     2. [Communicate between threads using pipe](#Chapter2.2)
     3. [Socket and SIGPIPE](#Chapter2.3)
+3. [Some commonly used commands in Linux](#Chapter3)
+    1. [g++/gdb](#Chapter3.1)
+    2. [valgrind](#Chapter3.2)
 
 <a name="Chapter1"></a>
 ## Memory Leak
@@ -254,3 +257,24 @@ int main() {
 Socket is another way for inter-process communication and can be used for internet communication with TCP or UDP. Similar to a pipe, it is using file descriptor to identify the target of communication. But unlike a pipe, the communication of socket is two-way, which means you can not only read but also write to another process.
 
 When a process attempts to write to a socket that is no longer open for reading, it will receive a SIGPIPE signal, meaning "broken pipe". This broken status can also be detected by the write() function with a negative return value. Since the default action of receiving SIGPIPE is to terminate the process, it is convenient for some applications to just ignore this signal using ```signal(SIGPIPE, SIG_IGN);``` and check the return value of write() function.
+
+<a name="Chapter3"></a>
+## Some commonly used commands in Linux
+This chapter contains some commands very useful for c++ programming in Linux.
+
+<a name="Chapter3.1"></a>
+### g++/gdb
+Suppose we have a file named `main.cpp`, we would like to compile it and run in gdb.
+
+`g++ main.cpp -g -o main` will compile the file using g++. `-g` option will allow debug information to be generated for gdb and `-o` option will allow code optimization. It generates an executable in the working directory. Then we can use `./main` to run the program in the console.
+
+`gdb main` will start debugging using gdb. We can then use `r` to run the program and we should also pass arguments here. For example, `r -v` will start the program with an argument "-v".
+
+We can use `b 19` to set a breakpoint at line 19. gdb will create a unique ID for this breakpoint so we enable it and disable it using command `en 1` and `dis 1`. A complete version such as `enable 1` is also acceptable. `where`, `list`, `n(next)`, `step` are also helpful. `up` and `down` can be used to enter or exit a call stack.
+
+Suppose we have a variable named "theta", then we can use `p theta` to print its value. We can also use `p *f` if f is a pointer and we want to know the value it is pointing to.
+
+<a name="Chapter3.2"></a>
+### valgrind
+As mentioned in previous chapters, valgrind is very useful for debugging memory management errors. We can use `valgrind ./main` to run the program under valgrind. Another helpful tool is memory sanitizer, which also gives us helpful information about memory usage.
+
